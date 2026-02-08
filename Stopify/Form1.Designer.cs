@@ -43,297 +43,316 @@
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.dgvCanciones = new System.Windows.Forms.DataGridView();
-            this.btnAbrirCarpeta = new System.Windows.Forms.Button();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnPause = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.btnGuardarPlaylist = new System.Windows.Forms.Button();
-            this.btnCargarPlaylist = new System.Windows.Forms.Button();
-            this.btnAbrirWMP = new System.Windows.Forms.Button();
-            this.btnLetra = new System.Windows.Forms.Button();
-            this.pbCover = new System.Windows.Forms.PictureBox();
-            this.rtbLyrics = new System.Windows.Forms.RichTextBox();
-            this.lblCanciones = new System.Windows.Forms.Label();
-            this.lblCover = new System.Windows.Forms.Label();
-            this.lblLyrics = new System.Windows.Forms.Label();
-            this.tbProgreso = new System.Windows.Forms.TrackBar();
-            this.tbVolumen = new System.Windows.Forms.TrackBar();
-            this.lblTiempoActual = new System.Windows.Forms.Label();
-            this.lblTiempoTotal = new System.Windows.Forms.Label();
-            this.lblVolumen = new System.Windows.Forms.Label();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCanciones)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbProgreso)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbVolumen)).BeginInit();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            dgvCanciones = new DataGridView();
+            btnAbrirCarpeta = new Button();
+            btnPlay = new Button();
+            btnPause = new Button();
+            btnStop = new Button();
+            btnGuardarPlaylist = new Button();
+            btnCargarPlaylist = new Button();
+            btnAbrirWMP = new Button();
+            btnLetra = new Button();
+            pbCover = new PictureBox();
+            rtbLyrics = new RichTextBox();
+            lblCanciones = new Label();
+            lblCover = new Label();
+            lblLyrics = new Label();
+            tbProgreso = new TrackBar();
+            tbVolumen = new TrackBar();
+            lblTiempoActual = new Label();
+            lblTiempoTotal = new Label();
+            lblVolumen = new Label();
+            btnNext = new Button();
+            btnPrev = new Button();
+            timer1 = new System.Windows.Forms.Timer(components);
+            ((System.ComponentModel.ISupportInitialize)dgvCanciones).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbCover).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)tbProgreso).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)tbVolumen).BeginInit();
+            SuspendLayout();
             // 
             // dgvCanciones
             // 
-            this.dgvCanciones.AllowUserToAddRows = false;
-            this.dgvCanciones.AllowUserToDeleteRows = false;
-            this.dgvCanciones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCanciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCanciones.Location = new System.Drawing.Point(12, 80);
-            this.dgvCanciones.MultiSelect = false;
-            this.dgvCanciones.Name = "dgvCanciones";
-            this.dgvCanciones.ReadOnly = true;
-            this.dgvCanciones.RowHeadersVisible = false;
-            this.dgvCanciones.RowTemplate.Height = 25;
-            this.dgvCanciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCanciones.Size = new System.Drawing.Size(670, 270);
-            this.dgvCanciones.TabIndex = 0;
-            this.dgvCanciones.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCanciones_CellDoubleClick);
+            dgvCanciones.AllowUserToAddRows = false;
+            dgvCanciones.AllowUserToDeleteRows = false;
+            dgvCanciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCanciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCanciones.Location = new Point(14, 107);
+            dgvCanciones.Margin = new Padding(3, 4, 3, 4);
+            dgvCanciones.MultiSelect = false;
+            dgvCanciones.Name = "dgvCanciones";
+            dgvCanciones.ReadOnly = true;
+            dgvCanciones.RowHeadersVisible = false;
+            dgvCanciones.RowHeadersWidth = 51;
+            dgvCanciones.RowTemplate.Height = 25;
+            dgvCanciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCanciones.Size = new Size(766, 360);
+            dgvCanciones.TabIndex = 0;
+            dgvCanciones.CellDoubleClick += dgvCanciones_CellDoubleClick;
             // 
             // btnAbrirCarpeta
             // 
-            this.btnAbrirCarpeta.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnAbrirCarpeta.Location = new System.Drawing.Point(12, 12);
-            this.btnAbrirCarpeta.Name = "btnAbrirCarpeta";
-            this.btnAbrirCarpeta.Size = new System.Drawing.Size(150, 40);
-            this.btnAbrirCarpeta.TabIndex = 1;
-            this.btnAbrirCarpeta.Text = "Abrir Carpeta 📂";
-            this.btnAbrirCarpeta.UseVisualStyleBackColor = true;
-            this.btnAbrirCarpeta.Click += new System.EventHandler(this.btnAbrirCarpeta_Click);
+            btnAbrirCarpeta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAbrirCarpeta.Location = new Point(14, 16);
+            btnAbrirCarpeta.Margin = new Padding(3, 4, 3, 4);
+            btnAbrirCarpeta.Name = "btnAbrirCarpeta";
+            btnAbrirCarpeta.Size = new Size(171, 53);
+            btnAbrirCarpeta.TabIndex = 1;
+            btnAbrirCarpeta.Text = "Abrir Carpeta 📂";
+            btnAbrirCarpeta.UseVisualStyleBackColor = true;
+            btnAbrirCarpeta.Click += btnAbrirCarpeta_Click;
             // 
             // btnPlay
             // 
-            this.btnPlay.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnPlay.Location = new System.Drawing.Point(180, 12);
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(90, 40);
-            this.btnPlay.TabIndex = 2;
-            this.btnPlay.Text = "Play ▶";
-            this.btnPlay.UseVisualStyleBackColor = true;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            btnPlay.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnPlay.Location = new Point(206, 16);
+            btnPlay.Margin = new Padding(3, 4, 3, 4);
+            btnPlay.Name = "btnPlay";
+            btnPlay.Size = new Size(103, 53);
+            btnPlay.TabIndex = 2;
+            btnPlay.Text = "Play ▶";
+            btnPlay.UseVisualStyleBackColor = true;
+            btnPlay.Click += btnPlay_Click;
             // 
             // btnPause
             // 
-            this.btnPause.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnPause.Location = new System.Drawing.Point(280, 12);
-            this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(90, 40);
-            this.btnPause.TabIndex = 3;
-            this.btnPause.Text = "Pause ⏸";
-            this.btnPause.UseVisualStyleBackColor = true;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            btnPause.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnPause.Location = new Point(320, 16);
+            btnPause.Margin = new Padding(3, 4, 3, 4);
+            btnPause.Name = "btnPause";
+            btnPause.Size = new Size(103, 53);
+            btnPause.TabIndex = 3;
+            btnPause.Text = "Pause ⏸";
+            btnPause.UseVisualStyleBackColor = true;
+            btnPause.Click += btnPause_Click;
             // 
             // btnStop
             // 
-            this.btnStop.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnStop.Location = new System.Drawing.Point(380, 12);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(90, 40);
-            this.btnStop.TabIndex = 4;
-            this.btnStop.Text = "Stop ⏹";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnPrev
-            // 
-            this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnPrev.Location = new System.Drawing.Point(480, 12);
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(90, 40);
-            this.btnPrev.TabIndex = 5;
-            this.btnPrev.Text = "Prev ⏮";
-            this.btnPrev.UseVisualStyleBackColor = true;
-            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
-            // 
-            // btnNext
-            // 
-            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnNext.Location = new System.Drawing.Point(580, 12);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(90, 40);
-            this.btnNext.TabIndex = 6;
-            this.btnNext.Text = "Next ⏭";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-            // 
-            // lblCanciones
-            // 
-            this.lblCanciones.AutoSize = true;
-            this.lblCanciones.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblCanciones.Location = new System.Drawing.Point(12, 57);
-            this.lblCanciones.Name = "lblCanciones";
-            this.lblCanciones.Size = new System.Drawing.Size(155, 20);
-            this.lblCanciones.TabIndex = 7;
-            this.lblCanciones.Text = "Lista de Canciones:";
-            // 
-            // tbProgreso
-            // 
-            this.tbProgreso.Location = new System.Drawing.Point(12, 360);
-            this.tbProgreso.Name = "tbProgreso";
-            this.tbProgreso.Size = new System.Drawing.Size(670, 45);
-            this.tbProgreso.TabIndex = 8;
-            this.tbProgreso.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tbProgreso_MouseDown);
-            this.tbProgreso.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tbProgreso_MouseUp);
-            // 
-            // lblTiempoActual
-            // 
-            this.lblTiempoActual.AutoSize = true;
-            this.lblTiempoActual.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTiempoActual.Location = new System.Drawing.Point(12, 405);
-            this.lblTiempoActual.Name = "lblTiempoActual";
-            this.lblTiempoActual.Size = new System.Drawing.Size(44, 19);
-            this.lblTiempoActual.TabIndex = 9;
-            this.lblTiempoActual.Text = "00:00";
-            // 
-            // lblTiempoTotal
-            // 
-            this.lblTiempoTotal.AutoSize = true;
-            this.lblTiempoTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTiempoTotal.Location = new System.Drawing.Point(638, 405);
-            this.lblTiempoTotal.Name = "lblTiempoTotal";
-            this.lblTiempoTotal.Size = new System.Drawing.Size(44, 19);
-            this.lblTiempoTotal.TabIndex = 10;
-            this.lblTiempoTotal.Text = "00:00";
-            // 
-            // lblVolumen
-            // 
-            this.lblVolumen.AutoSize = true;
-            this.lblVolumen.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblVolumen.Location = new System.Drawing.Point(12, 435);
-            this.lblVolumen.Name = "lblVolumen";
-            this.lblVolumen.Size = new System.Drawing.Size(73, 19);
-            this.lblVolumen.TabIndex = 11;
-            this.lblVolumen.Text = "Volumen:";
-            // 
-            // tbVolumen
-            // 
-            this.tbVolumen.Location = new System.Drawing.Point(90, 430);
-            this.tbVolumen.Maximum = 100;
-            this.tbVolumen.Name = "tbVolumen";
-            this.tbVolumen.Size = new System.Drawing.Size(250, 45);
-            this.tbVolumen.TabIndex = 12;
-            this.tbVolumen.Value = 50;
-            this.tbVolumen.Scroll += new System.EventHandler(this.tbVolumen_Scroll);
+            btnStop.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnStop.Location = new Point(434, 16);
+            btnStop.Margin = new Padding(3, 4, 3, 4);
+            btnStop.Name = "btnStop";
+            btnStop.Size = new Size(103, 53);
+            btnStop.TabIndex = 4;
+            btnStop.Text = "Stop ⏹";
+            btnStop.UseVisualStyleBackColor = true;
+            btnStop.Click += btnStop_Click;
             // 
             // btnGuardarPlaylist
             // 
-            this.btnGuardarPlaylist.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnGuardarPlaylist.Location = new System.Drawing.Point(12, 485);
-            this.btnGuardarPlaylist.Name = "btnGuardarPlaylist";
-            this.btnGuardarPlaylist.Size = new System.Drawing.Size(150, 40);
-            this.btnGuardarPlaylist.TabIndex = 13;
-            this.btnGuardarPlaylist.Text = "Guardar Playlist 💾";
-            this.btnGuardarPlaylist.UseVisualStyleBackColor = true;
-            this.btnGuardarPlaylist.Click += new System.EventHandler(this.btnGuardarPlaylist_Click);
+            btnGuardarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnGuardarPlaylist.Location = new Point(14, 647);
+            btnGuardarPlaylist.Margin = new Padding(3, 4, 3, 4);
+            btnGuardarPlaylist.Name = "btnGuardarPlaylist";
+            btnGuardarPlaylist.Size = new Size(171, 53);
+            btnGuardarPlaylist.TabIndex = 13;
+            btnGuardarPlaylist.Text = "Guardar Playlist 💾";
+            btnGuardarPlaylist.UseVisualStyleBackColor = true;
+            btnGuardarPlaylist.Click += btnGuardarPlaylist_Click;
             // 
             // btnCargarPlaylist
             // 
-            this.btnCargarPlaylist.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnCargarPlaylist.Location = new System.Drawing.Point(180, 485);
-            this.btnCargarPlaylist.Name = "btnCargarPlaylist";
-            this.btnCargarPlaylist.Size = new System.Drawing.Size(150, 40);
-            this.btnCargarPlaylist.TabIndex = 14;
-            this.btnCargarPlaylist.Text = "Cargar Playlist 📂";
-            this.btnCargarPlaylist.UseVisualStyleBackColor = true;
-            this.btnCargarPlaylist.Click += new System.EventHandler(this.btnCargarPlaylist_Click);
+            btnCargarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCargarPlaylist.Location = new Point(206, 647);
+            btnCargarPlaylist.Margin = new Padding(3, 4, 3, 4);
+            btnCargarPlaylist.Name = "btnCargarPlaylist";
+            btnCargarPlaylist.Size = new Size(171, 53);
+            btnCargarPlaylist.TabIndex = 14;
+            btnCargarPlaylist.Text = "Cargar Playlist 📂";
+            btnCargarPlaylist.UseVisualStyleBackColor = true;
+            btnCargarPlaylist.Click += btnCargarPlaylist_Click;
             // 
             // btnAbrirWMP
             // 
-            this.btnAbrirWMP.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnAbrirWMP.Location = new System.Drawing.Point(350, 485);
-            this.btnAbrirWMP.Name = "btnAbrirWMP";
-            this.btnAbrirWMP.Size = new System.Drawing.Size(150, 40);
-            this.btnAbrirWMP.TabIndex = 15;
-            this.btnAbrirWMP.Text = "Abrir en WMP 🎵";
-            this.btnAbrirWMP.UseVisualStyleBackColor = true;
-            this.btnAbrirWMP.Click += new System.EventHandler(this.btnAbrirWMP_Click);
+            btnAbrirWMP.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAbrirWMP.Location = new Point(400, 647);
+            btnAbrirWMP.Margin = new Padding(3, 4, 3, 4);
+            btnAbrirWMP.Name = "btnAbrirWMP";
+            btnAbrirWMP.Size = new Size(171, 53);
+            btnAbrirWMP.TabIndex = 15;
+            btnAbrirWMP.Text = "Abrir en WMP 🎵";
+            btnAbrirWMP.UseVisualStyleBackColor = true;
+            btnAbrirWMP.Click += btnAbrirWMP_Click;
             // 
             // btnLetra
             // 
-            this.btnLetra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnLetra.Location = new System.Drawing.Point(512, 485);
-            this.btnLetra.Name = "btnLetra";
-            this.btnLetra.Size = new System.Drawing.Size(170, 40);
-            this.btnLetra.TabIndex = 16;
-            this.btnLetra.Text = "Buscar Letra 🎤";
-            this.btnLetra.UseVisualStyleBackColor = true;
-            this.btnLetra.Click += new System.EventHandler(this.btnLetra_Click);
+            btnLetra.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnLetra.Location = new Point(585, 647);
+            btnLetra.Margin = new Padding(3, 4, 3, 4);
+            btnLetra.Name = "btnLetra";
+            btnLetra.Size = new Size(194, 53);
+            btnLetra.TabIndex = 16;
+            btnLetra.Text = "Buscar Letra 🎤";
+            btnLetra.UseVisualStyleBackColor = true;
+            btnLetra.Click += btnLetra_Click;
             // 
             // pbCover
             // 
-            this.pbCover.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbCover.Location = new System.Drawing.Point(700, 80);
-            this.pbCover.Name = "pbCover";
-            this.pbCover.Size = new System.Drawing.Size(250, 250);
-            this.pbCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCover.TabIndex = 17;
-            this.pbCover.TabStop = false;
-            // 
-            // lblCover
-            // 
-            this.lblCover.AutoSize = true;
-            this.lblCover.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblCover.Location = new System.Drawing.Point(700, 57);
-            this.lblCover.Name = "lblCover";
-            this.lblCover.Size = new System.Drawing.Size(74, 20);
-            this.lblCover.TabIndex = 18;
-            this.lblCover.Text = "Portada:";
-            // 
-            // lblLyrics
-            // 
-            this.lblLyrics.AutoSize = true;
-            this.lblLyrics.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblLyrics.Location = new System.Drawing.Point(700, 340);
-            this.lblLyrics.Name = "lblLyrics";
-            this.lblLyrics.Size = new System.Drawing.Size(51, 20);
-            this.lblLyrics.TabIndex = 19;
-            this.lblLyrics.Text = "Letra:";
+            pbCover.BorderStyle = BorderStyle.FixedSingle;
+            pbCover.Location = new Point(800, 107);
+            pbCover.Margin = new Padding(3, 4, 3, 4);
+            pbCover.Name = "pbCover";
+            pbCover.Size = new Size(285, 333);
+            pbCover.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbCover.TabIndex = 17;
+            pbCover.TabStop = false;
             // 
             // rtbLyrics
             // 
-            this.rtbLyrics.Location = new System.Drawing.Point(700, 363);
-            this.rtbLyrics.Name = "rtbLyrics";
-            this.rtbLyrics.Size = new System.Drawing.Size(250, 162);
-            this.rtbLyrics.TabIndex = 20;
-            this.rtbLyrics.Text = "";
+            rtbLyrics.Location = new Point(800, 484);
+            rtbLyrics.Margin = new Padding(3, 4, 3, 4);
+            rtbLyrics.Name = "rtbLyrics";
+            rtbLyrics.Size = new Size(285, 215);
+            rtbLyrics.TabIndex = 20;
+            rtbLyrics.Text = "";
+            // 
+            // lblCanciones
+            // 
+            lblCanciones.AutoSize = true;
+            lblCanciones.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCanciones.Location = new Point(14, 76);
+            lblCanciones.Name = "lblCanciones";
+            lblCanciones.Size = new Size(179, 25);
+            lblCanciones.TabIndex = 7;
+            lblCanciones.Text = "Lista de Canciones:";
+            // 
+            // lblCover
+            // 
+            lblCover.AutoSize = true;
+            lblCover.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCover.Location = new Point(800, 76);
+            lblCover.Name = "lblCover";
+            lblCover.Size = new Size(88, 25);
+            lblCover.TabIndex = 18;
+            lblCover.Text = "Portada:";
+            // 
+            // lblLyrics
+            // 
+            lblLyrics.AutoSize = true;
+            lblLyrics.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblLyrics.Location = new Point(800, 453);
+            lblLyrics.Name = "lblLyrics";
+            lblLyrics.Size = new Size(62, 25);
+            lblLyrics.TabIndex = 19;
+            lblLyrics.Text = "Letra:";
+            // 
+            // tbProgreso
+            // 
+            tbProgreso.Location = new Point(14, 480);
+            tbProgreso.Margin = new Padding(3, 4, 3, 4);
+            tbProgreso.Name = "tbProgreso";
+            tbProgreso.Size = new Size(766, 56);
+            tbProgreso.TabIndex = 8;
+            tbProgreso.MouseDown += tbProgreso_MouseDown;
+            tbProgreso.MouseUp += tbProgreso_MouseUp;
+            // 
+            // tbVolumen
+            // 
+            tbVolumen.Location = new Point(103, 573);
+            tbVolumen.Margin = new Padding(3, 4, 3, 4);
+            tbVolumen.Maximum = 100;
+            tbVolumen.Name = "tbVolumen";
+            tbVolumen.Size = new Size(286, 56);
+            tbVolumen.TabIndex = 12;
+            tbVolumen.Value = 50;
+            tbVolumen.Scroll += tbVolumen_Scroll;
+            // 
+            // lblTiempoActual
+            // 
+            lblTiempoActual.AutoSize = true;
+            lblTiempoActual.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTiempoActual.Location = new Point(14, 540);
+            lblTiempoActual.Name = "lblTiempoActual";
+            lblTiempoActual.Size = new Size(55, 23);
+            lblTiempoActual.TabIndex = 9;
+            lblTiempoActual.Text = "00:00";
+            // 
+            // lblTiempoTotal
+            // 
+            lblTiempoTotal.AutoSize = true;
+            lblTiempoTotal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTiempoTotal.Location = new Point(729, 540);
+            lblTiempoTotal.Name = "lblTiempoTotal";
+            lblTiempoTotal.Size = new Size(55, 23);
+            lblTiempoTotal.TabIndex = 10;
+            lblTiempoTotal.Text = "00:00";
+            // 
+            // lblVolumen
+            // 
+            lblVolumen.AutoSize = true;
+            lblVolumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblVolumen.Location = new Point(14, 580);
+            lblVolumen.Name = "lblVolumen";
+            lblVolumen.Size = new Size(85, 23);
+            lblVolumen.TabIndex = 11;
+            lblVolumen.Text = "Volumen:";
+            // 
+            // btnNext
+            // 
+            btnNext.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnNext.Location = new Point(663, 16);
+            btnNext.Margin = new Padding(3, 4, 3, 4);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(103, 53);
+            btnNext.TabIndex = 6;
+            btnNext.Text = "Next ⏭";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnPrev.Location = new Point(549, 16);
+            btnPrev.Margin = new Padding(3, 4, 3, 4);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(103, 53);
+            btnPrev.TabIndex = 5;
+            btnPrev.Text = "Prev ⏮";
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
             // 
             // timer1
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            timer1.Tick += timer1_Tick;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(970, 545);
-            this.Controls.Add(this.rtbLyrics);
-            this.Controls.Add(this.lblLyrics);
-            this.Controls.Add(this.lblCover);
-            this.Controls.Add(this.pbCover);
-            this.Controls.Add(this.btnLetra);
-            this.Controls.Add(this.btnAbrirWMP);
-            this.Controls.Add(this.btnCargarPlaylist);
-            this.Controls.Add(this.btnGuardarPlaylist);
-            this.Controls.Add(this.tbVolumen);
-            this.Controls.Add(this.lblVolumen);
-            this.Controls.Add(this.lblTiempoTotal);
-            this.Controls.Add(this.lblTiempoActual);
-            this.Controls.Add(this.tbProgreso);
-            this.Controls.Add(this.lblCanciones);
-            this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.btnPrev);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnPause);
-            this.Controls.Add(this.btnPlay);
-            this.Controls.Add(this.btnAbrirCarpeta);
-            this.Controls.Add(this.dgvCanciones);
-            this.Name = "Form1";
-            this.Text = "Reproductor MP3 - Proyecto";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCanciones)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbProgreso)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbVolumen)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1109, 727);
+            Controls.Add(rtbLyrics);
+            Controls.Add(lblLyrics);
+            Controls.Add(lblCover);
+            Controls.Add(pbCover);
+            Controls.Add(btnLetra);
+            Controls.Add(btnAbrirWMP);
+            Controls.Add(btnCargarPlaylist);
+            Controls.Add(btnGuardarPlaylist);
+            Controls.Add(tbVolumen);
+            Controls.Add(lblVolumen);
+            Controls.Add(lblTiempoTotal);
+            Controls.Add(lblTiempoActual);
+            Controls.Add(tbProgreso);
+            Controls.Add(lblCanciones);
+            Controls.Add(btnNext);
+            Controls.Add(btnPrev);
+            Controls.Add(btnStop);
+            Controls.Add(btnPause);
+            Controls.Add(btnPlay);
+            Controls.Add(btnAbrirCarpeta);
+            Controls.Add(dgvCanciones);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "Form1";
+            Text = "Stopify Music Player";
+            ((System.ComponentModel.ISupportInitialize)dgvCanciones).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbCover).EndInit();
+            ((System.ComponentModel.ISupportInitialize)tbProgreso).EndInit();
+            ((System.ComponentModel.ISupportInitialize)tbVolumen).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
