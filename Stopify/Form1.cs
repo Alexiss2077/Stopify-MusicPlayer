@@ -24,6 +24,12 @@ namespace Stopify
         private int indiceActual = -1;
         private bool arrastrandoProgreso = false;
 
+        // VARIABLES PARA DRRAAG  DROP
+        private int rowIndexFromMouseDown;
+        private int rowIndexOfItemUnderMouseToDrop;
+        private Rectangle dragBoxFromMouseDown;
+        private int dragRowIndex = -1;
+
         public Form1()
         {
             InitializeComponent();
@@ -33,9 +39,159 @@ namespace Stopify
             timer1.Start();
 
             tbVolumen.Value = 50;
+
+            // HABILITAR DRAG & DROP
+            ConfigurarDragDrop();
         }
 
-        
+
+
+        /// //////////////////////////////////////////////
+        // CONFIGURAR DRAG  DROP
+        ////// EXTRA PENDIENTEEEEEEEE /\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        private void ConfigurarDragDrop()
+        {
+            dgvCanciones.AllowDrop = true;
+            dgvCanciones.MouseDown += dgvCanciones_MouseDown;
+            dgvCanciones.MouseMove += dgvCanciones_MouseMove;
+            dgvCanciones.DragOver += dgvCanciones_DragOver;
+            dgvCanciones.DragDrop += dgvCanciones_DragDrop;
+            dgvCanciones.Paint += dgvCanciones_Paint;  
+        }
+
+        ///  //////////////////////////////////////////////////////////////////
+        ///  
+
+        // EVENTOS DE DRAG & DROP
+        private void dgvCanciones_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Obtener el índice de la fila donde se hizo clic
+            rowIndexFromMouseDown = dgvCanciones.HitTest(e.X, e.Y).RowIndex;
+
+            if (rowIndexFromMouseDown != -1)
+            {
+                // Obtener el tamaño del rectángulo de arrastre
+                Size dragSize = SystemInformation.DragSize;
+
+                // Crear un rectángulo alrededor del punto donde se hizo clic
+                dragBoxFromMouseDown = new Rectangle(
+                    new Point(e.X - (dragSize.Width / 2), e.Y - (dragSize.Height / 2)),
+                    dragSize);
+            }
+            else
+            {
+                dragBoxFromMouseDown = Rectangle.Empty;
+            }
+        }
+
+        private void dgvCanciones_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                // Si el mouse se mueve fuera del rectángulo de arrastre, iniciar el drag & drop
+                if (dragBoxFromMouseDown != Rectangle.Empty &&
+                    !dragBoxFromMouseDown.Contains(e.X, e.Y))
+                {
+                    if (rowIndexFromMouseDown != -1)
+                    {
+                        // Iniciar operación de arrastre
+                        DataGridViewRow rowToMove = dgvCanciones.Rows[rowIndexFromMouseDown];
+                        dgvCanciones.DoDragDrop(rowToMove, DragDropEffects.Move);
+                    }
+                }
+            }
+        }
+
+        private void dgvCanciones_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            // Obtener el punto del mouse
+            Point clientPoint = dgvCanciones.PointToClient(new Point(e.X, e.Y));
+            dragRowIndex = dgvCanciones.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+            // Redibujar para mostrar el indicador
+            dgvCanciones.Invalidate();
+        }
+
+        private void dgvCanciones_Paint(object sender, PaintEventArgs e)
+        {
+            if (dragRowIndex >= 0 && dragRowIndex < dgvCanciones.Rows.Count)
+            {
+                // Dibujar una línea donde se insertará la canción
+                Graphics g = e.Graphics;
+                Rectangle rect = dgvCanciones.GetRowDisplayRectangle(dragRowIndex, true);
+
+                using (Pen pen = new Pen(Color.CornflowerBlue, 2))
+                {
+                    g.DrawLine(pen, rect.Left, rect.Top, rect.Right, rect.Top);
+                }
+            }
+        }
+
+        private void dgvCanciones_DragDrop(object sender, DragEventArgs e)
+        {
+            // Obtener el punto donde se soltó
+            Point clientPoint = dgvCanciones.PointToClient(new Point(e.X, e.Y));
+
+            // Obtener el índice de la fila donde se soltó
+            rowIndexOfItemUnderMouseToDrop = dgvCanciones.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+            // Si se soltó en una fila válida y no es la misma fila
+            if (e.Effect == DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop != -1)
+            {
+                DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+
+                if (rowToMove != null && rowIndexFromMouseDown != rowIndexOfItemUnderMouseToDrop)
+                {
+                    // Guardar los datos de la fila
+                    string titulo = rowToMove.Cells["Titulo"].Value.ToString();
+                    string artista = rowToMove.Cells["Artista"].Value.ToString();
+                    string album = rowToMove.Cells["Album"].Value.ToString();
+                    string duracion = rowToMove.Cells["Duracion"].Value.ToString();
+                    string ruta = rowToMove.Cells["Ruta"].Value.ToString();
+
+                    // Eliminar la fila de su posición original
+                    dgvCanciones.Rows.RemoveAt(rowIndexFromMouseDown);
+
+                    // Ajustar el índice de destino si es necesario
+                    int targetIndex = rowIndexOfItemUnderMouseToDrop;
+                    if (rowIndexFromMouseDown < rowIndexOfItemUnderMouseToDrop)
+                    {
+                        targetIndex--;
+                    }
+
+                    // Insertar la fila en la nueva posición
+                    dgvCanciones.Rows.Insert(targetIndex, titulo, artista, album, duracion, ruta);
+
+                    // Seleccionar la fila movida
+                    dgvCanciones.Rows[targetIndex].Selected = true;
+                    dgvCanciones.CurrentCell = dgvCanciones.Rows[targetIndex].Cells[0];
+
+                    // Actualizar índice actual si es necesario
+                    if (indiceActual == rowIndexFromMouseDown)
+                    {
+                        indiceActual = targetIndex;
+                    }
+                    else if (rowIndexFromMouseDown < indiceActual && targetIndex >= indiceActual)
+                    {
+                        indiceActual--;
+                    }
+                    else if (rowIndexFromMouseDown > indiceActual && targetIndex <= indiceActual)
+                    {
+                        indiceActual++;
+                    }
+                }
+            }
+        }
+
+
+        /// /////////////////////////////////////////////////////////////
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         // CONFIGURAR GRID
         private void ConfigurarGrid()
         {
