@@ -77,134 +77,136 @@
             // 
             dgvCanciones.AllowUserToAddRows = false;
             dgvCanciones.AllowUserToDeleteRows = false;
+            dgvCanciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvCanciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCanciones.BackgroundColor = Color.FromArgb(64, 64, 64);
             dgvCanciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanciones.Location = new Point(14, 107);
-            dgvCanciones.Margin = new Padding(3, 4, 3, 4);
+            dgvCanciones.Location = new Point(12, 80);
             dgvCanciones.MultiSelect = false;
             dgvCanciones.Name = "dgvCanciones";
             dgvCanciones.ReadOnly = true;
             dgvCanciones.RowHeadersVisible = false;
             dgvCanciones.RowHeadersWidth = 51;
-            dgvCanciones.RowTemplate.Height = 25;
             dgvCanciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCanciones.Size = new Size(766, 360);
+            dgvCanciones.Size = new Size(670, 270);
             dgvCanciones.TabIndex = 0;
             dgvCanciones.CellDoubleClick += dgvCanciones_CellDoubleClick;
             // 
             // btnAbrirCarpeta
             // 
+            btnAbrirCarpeta.BackColor = Color.LightGray;
             btnAbrirCarpeta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAbrirCarpeta.Location = new Point(14, 16);
-            btnAbrirCarpeta.Margin = new Padding(3, 4, 3, 4);
+            btnAbrirCarpeta.Location = new Point(12, 12);
             btnAbrirCarpeta.Name = "btnAbrirCarpeta";
-            btnAbrirCarpeta.Size = new Size(171, 53);
+            btnAbrirCarpeta.Size = new Size(150, 40);
             btnAbrirCarpeta.TabIndex = 1;
             btnAbrirCarpeta.Text = "Abrir Carpeta 📂";
-            btnAbrirCarpeta.UseVisualStyleBackColor = true;
+            btnAbrirCarpeta.UseVisualStyleBackColor = false;
             btnAbrirCarpeta.Click += btnAbrirCarpeta_Click;
             // 
             // btnPlay
             // 
+            btnPlay.BackColor = Color.LightGray;
             btnPlay.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPlay.Location = new Point(206, 16);
-            btnPlay.Margin = new Padding(3, 4, 3, 4);
+            btnPlay.Location = new Point(180, 12);
             btnPlay.Name = "btnPlay";
-            btnPlay.Size = new Size(103, 53);
+            btnPlay.Size = new Size(90, 40);
             btnPlay.TabIndex = 2;
             btnPlay.Text = "Play ▶";
-            btnPlay.UseVisualStyleBackColor = true;
+            btnPlay.UseVisualStyleBackColor = false;
             btnPlay.Click += btnPlay_Click;
             // 
             // btnPause
             // 
+            btnPause.BackColor = Color.LightGray;
             btnPause.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPause.Location = new Point(320, 16);
-            btnPause.Margin = new Padding(3, 4, 3, 4);
+            btnPause.Location = new Point(280, 12);
             btnPause.Name = "btnPause";
-            btnPause.Size = new Size(103, 53);
+            btnPause.Size = new Size(90, 40);
             btnPause.TabIndex = 3;
             btnPause.Text = "Pause ⏸";
-            btnPause.UseVisualStyleBackColor = true;
+            btnPause.UseVisualStyleBackColor = false;
             btnPause.Click += btnPause_Click;
             // 
             // btnStop
             // 
+            btnStop.BackColor = Color.LightGray;
             btnStop.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnStop.Location = new Point(434, 16);
-            btnStop.Margin = new Padding(3, 4, 3, 4);
+            btnStop.Location = new Point(380, 12);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(103, 53);
+            btnStop.Size = new Size(90, 40);
             btnStop.TabIndex = 4;
             btnStop.Text = "Stop ⏹";
-            btnStop.UseVisualStyleBackColor = true;
+            btnStop.UseVisualStyleBackColor = false;
             btnStop.Click += btnStop_Click;
             // 
             // btnGuardarPlaylist
             // 
+            btnGuardarPlaylist.BackColor = Color.LightGray;
             btnGuardarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnGuardarPlaylist.Location = new Point(14, 647);
-            btnGuardarPlaylist.Margin = new Padding(3, 4, 3, 4);
+            btnGuardarPlaylist.Location = new Point(12, 485);
             btnGuardarPlaylist.Name = "btnGuardarPlaylist";
-            btnGuardarPlaylist.Size = new Size(171, 53);
+            btnGuardarPlaylist.Size = new Size(150, 40);
             btnGuardarPlaylist.TabIndex = 13;
             btnGuardarPlaylist.Text = "Guardar Playlist 💾";
-            btnGuardarPlaylist.UseVisualStyleBackColor = true;
+            btnGuardarPlaylist.UseVisualStyleBackColor = false;
             btnGuardarPlaylist.Click += btnGuardarPlaylist_Click;
             // 
             // btnCargarPlaylist
             // 
+            btnCargarPlaylist.BackColor = Color.LightGray;
             btnCargarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCargarPlaylist.Location = new Point(206, 647);
-            btnCargarPlaylist.Margin = new Padding(3, 4, 3, 4);
+            btnCargarPlaylist.Location = new Point(180, 485);
             btnCargarPlaylist.Name = "btnCargarPlaylist";
-            btnCargarPlaylist.Size = new Size(171, 53);
+            btnCargarPlaylist.Size = new Size(150, 40);
             btnCargarPlaylist.TabIndex = 14;
             btnCargarPlaylist.Text = "Cargar Playlist 📂";
-            btnCargarPlaylist.UseVisualStyleBackColor = true;
+            btnCargarPlaylist.UseVisualStyleBackColor = false;
             btnCargarPlaylist.Click += btnCargarPlaylist_Click;
             // 
             // btnAbrirWMP
             // 
+            btnAbrirWMP.BackColor = Color.LightGray;
             btnAbrirWMP.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAbrirWMP.Location = new Point(400, 647);
-            btnAbrirWMP.Margin = new Padding(3, 4, 3, 4);
+            btnAbrirWMP.Location = new Point(350, 485);
             btnAbrirWMP.Name = "btnAbrirWMP";
-            btnAbrirWMP.Size = new Size(171, 53);
+            btnAbrirWMP.Size = new Size(150, 40);
             btnAbrirWMP.TabIndex = 15;
             btnAbrirWMP.Text = "Abrir en WMP 🎵";
-            btnAbrirWMP.UseVisualStyleBackColor = true;
+            btnAbrirWMP.UseVisualStyleBackColor = false;
             btnAbrirWMP.Click += btnAbrirWMP_Click;
             // 
             // btnLetra
             // 
+            btnLetra.BackColor = Color.LightGray;
             btnLetra.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnLetra.Location = new Point(585, 647);
-            btnLetra.Margin = new Padding(3, 4, 3, 4);
+            btnLetra.Location = new Point(512, 485);
             btnLetra.Name = "btnLetra";
-            btnLetra.Size = new Size(194, 53);
+            btnLetra.Size = new Size(170, 40);
             btnLetra.TabIndex = 16;
             btnLetra.Text = "Buscar Letra 🎤";
-            btnLetra.UseVisualStyleBackColor = true;
+            btnLetra.UseVisualStyleBackColor = false;
             btnLetra.Click += btnLetra_Click;
             // 
             // pbCover
             // 
+            pbCover.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pbCover.BackColor = Color.GreenYellow;
             pbCover.BorderStyle = BorderStyle.FixedSingle;
-            pbCover.Location = new Point(800, 107);
-            pbCover.Margin = new Padding(3, 4, 3, 4);
+            pbCover.Location = new Point(700, 80);
             pbCover.Name = "pbCover";
-            pbCover.Size = new Size(285, 333);
+            pbCover.Size = new Size(250, 250);
             pbCover.SizeMode = PictureBoxSizeMode.StretchImage;
             pbCover.TabIndex = 17;
             pbCover.TabStop = false;
             // 
             // rtbLyrics
             // 
-            rtbLyrics.Location = new Point(800, 484);
-            rtbLyrics.Margin = new Padding(3, 4, 3, 4);
+            rtbLyrics.BackColor = Color.Chartreuse;
+            rtbLyrics.Font = new Font("Yu Gothic UI", 13.8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            rtbLyrics.Location = new Point(700, 363);
             rtbLyrics.Name = "rtbLyrics";
-            rtbLyrics.Size = new Size(285, 215);
+            rtbLyrics.Size = new Size(250, 162);
             rtbLyrics.TabIndex = 20;
             rtbLyrics.Text = "";
             // 
@@ -212,9 +214,9 @@
             // 
             lblCanciones.AutoSize = true;
             lblCanciones.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCanciones.Location = new Point(14, 76);
+            lblCanciones.Location = new Point(12, 57);
             lblCanciones.Name = "lblCanciones";
-            lblCanciones.Size = new Size(179, 25);
+            lblCanciones.Size = new Size(141, 20);
             lblCanciones.TabIndex = 7;
             lblCanciones.Text = "Lista de Canciones:";
             // 
@@ -222,9 +224,9 @@
             // 
             lblCover.AutoSize = true;
             lblCover.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCover.Location = new Point(800, 76);
+            lblCover.Location = new Point(700, 57);
             lblCover.Name = "lblCover";
-            lblCover.Size = new Size(88, 25);
+            lblCover.Size = new Size(68, 20);
             lblCover.TabIndex = 18;
             lblCover.Text = "Portada:";
             // 
@@ -232,29 +234,27 @@
             // 
             lblLyrics.AutoSize = true;
             lblLyrics.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblLyrics.Location = new Point(800, 453);
+            lblLyrics.Location = new Point(700, 340);
             lblLyrics.Name = "lblLyrics";
-            lblLyrics.Size = new Size(62, 25);
+            lblLyrics.Size = new Size(49, 20);
             lblLyrics.TabIndex = 19;
             lblLyrics.Text = "Letra:";
             // 
             // tbProgreso
             // 
-            tbProgreso.Location = new Point(14, 480);
-            tbProgreso.Margin = new Padding(3, 4, 3, 4);
+            tbProgreso.Location = new Point(12, 360);
             tbProgreso.Name = "tbProgreso";
-            tbProgreso.Size = new Size(766, 56);
+            tbProgreso.Size = new Size(670, 45);
             tbProgreso.TabIndex = 8;
             tbProgreso.MouseDown += tbProgreso_MouseDown;
             tbProgreso.MouseUp += tbProgreso_MouseUp;
             // 
             // tbVolumen
             // 
-            tbVolumen.Location = new Point(103, 573);
-            tbVolumen.Margin = new Padding(3, 4, 3, 4);
+            tbVolumen.Location = new Point(90, 430);
             tbVolumen.Maximum = 100;
             tbVolumen.Name = "tbVolumen";
-            tbVolumen.Size = new Size(286, 56);
+            tbVolumen.Size = new Size(250, 45);
             tbVolumen.TabIndex = 12;
             tbVolumen.Value = 50;
             tbVolumen.Scroll += tbVolumen_Scroll;
@@ -263,9 +263,9 @@
             // 
             lblTiempoActual.AutoSize = true;
             lblTiempoActual.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTiempoActual.Location = new Point(14, 540);
+            lblTiempoActual.Location = new Point(12, 405);
             lblTiempoActual.Name = "lblTiempoActual";
-            lblTiempoActual.Size = new Size(55, 23);
+            lblTiempoActual.Size = new Size(45, 19);
             lblTiempoActual.TabIndex = 9;
             lblTiempoActual.Text = "00:00";
             // 
@@ -273,9 +273,9 @@
             // 
             lblTiempoTotal.AutoSize = true;
             lblTiempoTotal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTiempoTotal.Location = new Point(729, 540);
+            lblTiempoTotal.Location = new Point(638, 405);
             lblTiempoTotal.Name = "lblTiempoTotal";
-            lblTiempoTotal.Size = new Size(55, 23);
+            lblTiempoTotal.Size = new Size(45, 19);
             lblTiempoTotal.TabIndex = 10;
             lblTiempoTotal.Text = "00:00";
             // 
@@ -283,34 +283,34 @@
             // 
             lblVolumen.AutoSize = true;
             lblVolumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblVolumen.Location = new Point(14, 580);
+            lblVolumen.Location = new Point(12, 435);
             lblVolumen.Name = "lblVolumen";
-            lblVolumen.Size = new Size(85, 23);
+            lblVolumen.Size = new Size(71, 19);
             lblVolumen.TabIndex = 11;
             lblVolumen.Text = "Volumen:";
             // 
             // btnNext
             // 
+            btnNext.BackColor = Color.LightGray;
             btnNext.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnNext.Location = new Point(663, 16);
-            btnNext.Margin = new Padding(3, 4, 3, 4);
+            btnNext.Location = new Point(580, 12);
             btnNext.Name = "btnNext";
-            btnNext.Size = new Size(103, 53);
+            btnNext.Size = new Size(90, 40);
             btnNext.TabIndex = 6;
             btnNext.Text = "Next ⏭";
-            btnNext.UseVisualStyleBackColor = true;
+            btnNext.UseVisualStyleBackColor = false;
             btnNext.Click += btnNext_Click;
             // 
             // btnPrev
             // 
+            btnPrev.BackColor = Color.LightGray;
             btnPrev.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPrev.Location = new Point(549, 16);
-            btnPrev.Margin = new Padding(3, 4, 3, 4);
+            btnPrev.Location = new Point(480, 12);
             btnPrev.Name = "btnPrev";
-            btnPrev.Size = new Size(103, 53);
+            btnPrev.Size = new Size(90, 40);
             btnPrev.TabIndex = 5;
             btnPrev.Text = "Prev ⏮";
-            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.UseVisualStyleBackColor = false;
             btnPrev.Click += btnPrev_Click;
             // 
             // timer1
@@ -319,9 +319,12 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1109, 727);
+            AutoSize = true;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(970, 545);
             Controls.Add(rtbLyrics);
             Controls.Add(lblLyrics);
             Controls.Add(lblCover);
@@ -343,8 +346,8 @@
             Controls.Add(btnPlay);
             Controls.Add(btnAbrirCarpeta);
             Controls.Add(dgvCanciones);
+            DoubleBuffered = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Stopify Music Player";
             ((System.ComponentModel.ISupportInitialize)dgvCanciones).EndInit();

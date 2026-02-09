@@ -48,6 +48,30 @@ namespace Stopify
             dgvCanciones.Columns.Add("Ruta", "Ruta");
 
             dgvCanciones.Columns["Ruta"].Visible = false;
+
+
+            // PERSONALIZAR ENCABEZADOS   ///// CAMBIOS PENDIENTEEEEE
+            
+
+            // Estilo del encabezado 
+            dgvCanciones.ColumnHeadersDefaultCellStyle.BackColor = Color.SlateGray;
+            dgvCanciones.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvCanciones.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvCanciones.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            dgvCanciones.EnableHeadersVisualStyles = false; 
+
+            // Estilo de las filas 
+            dgvCanciones.DefaultCellStyle.BackColor = Color.White;
+            dgvCanciones.DefaultCellStyle.ForeColor = Color.Black;
+            dgvCanciones.DefaultCellStyle.SelectionBackColor = Color.LightSlateGray;
+            dgvCanciones.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Filas alternadas
+            dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.DimGray;
+
+            // Bordes
+            dgvCanciones.GridColor = Color.Black;
         }
 
 
@@ -256,9 +280,29 @@ namespace Stopify
             }
         }
 
+
+
+        // MÉTODO DE VALIDACIÓN 
+      
+        private bool ValidarCancionesCargadas()
+        {
+
+            if (dgvCanciones.Rows.Count == 0)
+            {
+                MessageBox.Show("Por favor, selecciona una carpeta primero.",
+                                "Sin canciones",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
         // BOTONES PLAY PAUSE STOP
         private async void btnPlay_Click(object sender, EventArgs e)
         {
+
+            if (!ValidarCancionesCargadas()) return;
             if (outputDevice == null || audioFile == null)
             {
                 if (dgvCanciones.SelectedRows.Count > 0)
@@ -270,15 +314,19 @@ namespace Stopify
             }
 
             outputDevice.Play();
+
+            
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
+            if (!ValidarCancionesCargadas()) return;
             outputDevice?.Pause();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
+            if (!ValidarCancionesCargadas()) return;
             DetenerCancion();
         }
 
@@ -321,11 +369,13 @@ namespace Stopify
 
         private async void btnNext_Click(object sender, EventArgs e)
         {
+            if (!ValidarCancionesCargadas()) return;
             await CambiarCancion(1);
         }
 
         private async void btnPrev_Click(object sender, EventArgs e)
         {
+            if (!ValidarCancionesCargadas()) return;
             await CambiarCancion(-1);   // Cambiar a la canción anterior
         }
 
