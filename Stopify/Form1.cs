@@ -10,7 +10,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
-
+//////////////////////////////////ejh
+///
 // Alias para evitar conflictos
 using TagFile = TagLib.File;
 using IOFile = System.IO.File;
