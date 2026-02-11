@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
+using System.Text.Json;  
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
@@ -221,11 +221,11 @@ namespace Stopify
             // Estilo de las filas 
             dgvCanciones.DefaultCellStyle.BackColor = Color.White;
             dgvCanciones.DefaultCellStyle.ForeColor = Color.Black;
-            dgvCanciones.DefaultCellStyle.SelectionBackColor = Color.LightSlateGray;
+            dgvCanciones.DefaultCellStyle.SelectionBackColor = Color.LimeGreen;  // color de la cancion q se esta sonando
             dgvCanciones.DefaultCellStyle.SelectionForeColor = Color.White;
 
             // Filas alternadas
-            dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.DimGray;
+            dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.DarkSlateGray;
 
             // Bordes
             dgvCanciones.GridColor = Color.Black;
@@ -245,12 +245,67 @@ namespace Stopify
                 string album = mp3.Tag.Album ?? "Desconocido";
                 string duracion = mp3.Properties.Duration.ToString(@"mm\:ss");
 
+
+                //LIMPIAR ARTISTA Y TÍTULO
+                artista = LimpiarNombreArtista(artista);
+                titulo = LimpiarTitulo(titulo);
+
                 dgvCanciones.Rows.Add(titulo, artista, album, duracion, ruta);
             }
             catch
             {
                 // Ignorar archivos dañados
             }
+        }
+
+        // LIMPIAR NOMBRE DE ARTISTA
+        private string LimpiarNombreArtista(string artista)
+        {
+            if (string.IsNullOrWhiteSpace(artista))
+                return "Desconocido";
+
+            // Eliminar " - Topic", "VEVO", etc.
+            artista = System.Text.RegularExpressions.Regex.Replace(
+                artista,
+                @"\s*-?\s*(Topic|VEVO|Official)$",
+                "",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            return artista.Trim();
+        }
+
+        // LIMPIAR TÍTULO
+        private string LimpiarTitulo(string titulo)
+        {
+            if (string.IsNullOrWhiteSpace(titulo))
+                return "Sin título";
+
+            // Eliminar paréntesis con contenido al final
+            titulo = System.Text.RegularExpressions.Regex.Replace(
+                titulo,
+                @"\s*\([^)]*?(Official|Audio|Video|Lyrics|Lyric|Music Video|HD|4K|Visualizer|Explicit|Clean|Remaster)[^)]*?\)",
+                "",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            // Eliminar corchetes con contenido al final
+            titulo = System.Text.RegularExpressions.Regex.Replace(
+                titulo,
+                @"\s*\[[^\]]*?(Official|Audio|Video|Lyrics|Lyric|Music Video|HD|4K|Visualizer|Explicit|Clean|Remaster)[^\]]*?\]",
+                "",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            // Eliminar texto suelto al final sin paréntesis
+            titulo = System.Text.RegularExpressions.Regex.Replace(
+                titulo,
+                @"\s*-?\s*(Official Audio|Official Video|Music Video|Official Music Video|Lyrics|Lyric Video|Official Lyric Video|Audio|Video|Visualizer|Explicit|Clean|Remastered)$",
+                "",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+
+            return titulo.Trim();
         }
 
 
@@ -670,6 +725,8 @@ namespace Stopify
             try
             {
                 System.Diagnostics.Process.Start("wmplayer.exe", $"\"{ruta}\"");
+                outputDevice?.Pause();
+               // System.Diagnostics.Process.
             }
             catch (Exception ex)
             {
@@ -677,9 +734,7 @@ namespace Stopify
             }
         }
 
-        // ================================
-        // EXTRAER ARTISTA PRINCIPAL
-        // ================================
+        // EXTRAER ARTISTA PRINCIPAL para MEJORAR BÚSQUEDAS DE COVER 
         private string ExtraerArtistaPrincipal(string artista)
         {
             if (string.IsNullOrWhiteSpace(artista))
