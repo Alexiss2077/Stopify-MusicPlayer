@@ -31,6 +31,11 @@ namespace Stopify
         private Rectangle dragBoxFromMouseDown;
         private int dragRowIndex = -1;
 
+
+        /// ALEATORIO AHUFFLE
+        private bool modoAleatorio = false;  // ← NUEVO
+        private bool modoRepetir = false;    // ← NUEVO
+        private Random random = new Random(); // ← NUEVO
         public Form1()
         {
             InitializeComponent();
@@ -413,6 +418,7 @@ namespace Stopify
             }
         }
 
+
         private async Task DescargarCoverITunes(string artista, string titulo)
         {
             try
@@ -421,12 +427,10 @@ namespace Stopify
                 {
                     client.Timeout = TimeSpan.FromSeconds(10);
 
-                    // Normalizar artista y título
                     string artistaLimpio = ExtraerArtistaPrincipal(artista);
                     artistaLimpio = NormalizarTexto(artistaLimpio);
                     string tituloLimpio = NormalizarTexto(titulo);
 
-                    // Buscar en iTunes
                     string query = Uri.EscapeDataString($"{artistaLimpio} {tituloLimpio}");
                     string url = $"https://itunes.apple.com/search?term={query}&limit=10&entity=song";
 
@@ -442,7 +446,6 @@ namespace Stopify
                             return;
                         }
 
-                        // Buscar la mejor coincidencia
                         double mejorScore = 0;
                         string mejorCoverUrl = null;
 
@@ -453,11 +456,9 @@ namespace Stopify
                             string artistaAPI = NormalizarTexto(item.GetProperty("artistName").GetString());
                             string tituloAPI = NormalizarTexto(item.GetProperty("trackName").GetString());
 
-                            // Calcular similitud
                             double scoreArtista = CalcularSimilitud(artistaLimpio, artistaAPI);
                             double scoreTitulo = CalcularSimilitud(tituloLimpio, tituloAPI);
 
-                            // combinado 
                             double scoreTotal = (scoreTitulo * 0.7) + (scoreArtista * 0.3);
 
                             if (scoreTotal > mejorScore)
@@ -467,7 +468,6 @@ namespace Stopify
                             }
                         }
 
-                        // mbral moderado: 60%
                         if (mejorScore >= 0.60 && mejorCoverUrl != null)
                         {
                             string coverUrl = mejorCoverUrl.Replace("100x100", "600x600");
@@ -478,6 +478,9 @@ namespace Stopify
                             {
                                 pbCover.Image = Image.FromStream(ms);
                             }
+
+                            //GUARDAR COVER EN EL MP3
+                            await GuardarCoverEnMP3(imgBytes);
                         }
                         else
                         {
@@ -492,10 +495,45 @@ namespace Stopify
             }
         }
 
+        // ================================
+        // GUARDAR COVER EN MP3
+        private async Task GuardarCoverEnMP3(byte[] imagenBytes)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    if (indiceActual < 0 || indiceActual >= dgvCanciones.Rows.Count)
+                        return;
+
+                    string ruta = dgvCanciones.Rows[indiceActual].Cells["Ruta"].Value.ToString();
+
+                    var mp3 = TagFile.Create(ruta);
+
+                    // Crear picture
+                    var picture = new TagLib.Picture(imagenBytes)
+                    {
+                        Type = TagLib.PictureType.FrontCover,
+                        MimeType = "image/png",
+                        Description = "Cover"
+                    };
+
+                    // Asignar al MP3
+                    mp3.Tag.Pictures = new TagLib.IPicture[] { picture };
+
+                    // Guardar
+                    mp3.Save();
+                }
+                catch
+                {
+                    // Si falla, no hacer nada (el cover ya se muestra en la interfaz)
+                }
+            });
+        }
 
 
         // MÉTODO DE VALIDACIÓN 
-      
+
         private bool ValidarCancionesCargadas()
         {
 
@@ -542,6 +580,24 @@ namespace Stopify
             DetenerCancion();
         }
 
+        // ================================
+        // BOTÓN ALEATORIO (SHUFFLE)
+        private void btnAleatorio_Click(object sender, EventArgs e)
+        {
+            modoAleatorio = !modoAleatorio;
+
+            if (modoAleatorio)
+            {
+                btnAleatorio.BackColor = Color.Green; // Visual: activado
+                btnAleatorio.Text = "🔀 ON";
+            }
+            else
+            {
+                btnAleatorio.BackColor = SystemColors.Control; // Visual: desactivado
+                btnAleatorio.Text = "🔀 Aleatorio";
+            }
+        }
+
         private void DetenerCancion()
         {
             if (outputDevice != null)
@@ -562,22 +618,194 @@ namespace Stopify
         }
 
         // NEXT / PREv
+        // ================================
+        // CAMBIAR CANCIÓN (MODIFICADO)
+        // ================================
         private async Task CambiarCancion(int direccion)
         {
             if (dgvCanciones.Rows.Count == 0) return;
 
-            indiceActual += direccion;
+            // SI ESTÁ EN MODO REPETIR UNA CANCIÓN
+            if (modoRepetir)
+            {
+                // Reproducir la misma canción
+                await ReproducirCancion(indiceActual);
+                return;
+            }
 
-            // Circular
-            if (indiceActual >= dgvCanciones.Rows.Count)
-                indiceActual = 0;
-            else if (indiceActual < 0)
-                indiceActual = dgvCanciones.Rows.Count - 1;
+            // SI ESTÁ EN MODO ALEATORIO
+            if (modoAleatorio)
+            {
+                // Seleccionar índice aleatorio
+                int nuevoIndice;
+                do
+                {
+                    nuevoIndice = random.Next(0, dgvCanciones.Rows.Count);
+                } while (nuevoIndice == indiceActual && dgvCanciones.Rows.Count > 1); // Evitar repetir la misma
+
+                indiceActual = nuevoIndice;
+            }
+            else
+            {
+                // MODO NORMAL: siguiente o anterior
+                indiceActual += direccion;
+
+                // Circular
+                if (indiceActual >= dgvCanciones.Rows.Count)
+                    indiceActual = 0;
+                else if (indiceActual < 0)
+                    indiceActual = dgvCanciones.Rows.Count - 1;
+            }
 
             dgvCanciones.Rows[indiceActual].Selected = true;
+            dgvCanciones.CurrentCell = dgvCanciones.Rows[indiceActual].Cells[0];
 
             await ReproducirCancion(indiceActual);
         }
+
+
+        // ================================
+        // BOTÓN REPETIR UNA CANCIÓN
+        // ================================
+        private void btnRepetir_Click(object sender, EventArgs e)
+        {
+            modoRepetir = !modoRepetir;
+
+            if (modoRepetir)
+            {
+                btnRepetir.BackColor = Color.Orange; // Visual: activado
+                btnRepetir.Text = "🔂 ON";
+            }
+            else
+            {
+                btnRepetir.BackColor = SystemColors.Control; // Visual: desactivado
+                btnRepetir.Text = "🔁 Repetir";
+            }
+        }
+
+
+        // ================================
+        // ELIMINAR CANCIÓN SELECCIONADA
+        // ================================
+        private void btnEliminarCancion_Click(object sender, EventArgs e)
+        {
+            if (!ValidarCancionesCargadas()) return;
+
+            if (dgvCanciones.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona una canción primero.");
+                return;
+            }
+
+            int indiceEliminar = dgvCanciones.SelectedRows[0].Index;
+            string titulo = dgvCanciones.Rows[indiceEliminar].Cells["Titulo"].Value.ToString();
+            string artista = dgvCanciones.Rows[indiceEliminar].Cells["Artista"].Value.ToString();
+
+            var resultado = MessageBox.Show(
+                $"¿Eliminar de la lista?\n\n{artista} - {titulo}\n\n(El archivo no se eliminará del disco)",
+                "Confirmar eliminación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (resultado == DialogResult.Yes)
+            {
+                // Si se está reproduciendo esta canción, detener
+                if (indiceActual == indiceEliminar)
+                {
+                    DetenerCancion();
+                    indiceActual = -1;
+                }
+
+                // Eliminar de la lista
+                dgvCanciones.Rows.RemoveAt(indiceEliminar);
+
+                // Ajustar índice actual
+                if (indiceActual > indiceEliminar)
+                {
+                    indiceActual--;
+                }
+
+                // Seleccionar siguiente canción si hay
+                if (dgvCanciones.Rows.Count > 0)
+                {
+                    int nuevoIndice = Math.Min(indiceEliminar, dgvCanciones.Rows.Count - 1);
+                    dgvCanciones.Rows[nuevoIndice].Selected = true;
+                }
+                else
+                {
+                    //ActualizarEstadoBotones();
+                }
+            }
+        }
+
+        // ================================
+        // EDITAR TAGS DE CANCIÓN
+        // ================================
+        private async void btnEditarTags_Click(object sender, EventArgs e)
+        {
+            if (!ValidarCancionesCargadas()) return;
+
+            if (dgvCanciones.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona una canción primero.");
+                return;
+            }
+
+            int indice = dgvCanciones.SelectedRows[0].Index;
+            string ruta = dgvCanciones.Rows[indice].Cells["Ruta"].Value.ToString();
+
+            // Detener reproducción si es la canción actual
+            bool estabaReproduciendo = false;
+            if (audioFile != null && indice == indiceActual)
+            {
+                estabaReproduciendo = outputDevice?.PlaybackState == PlaybackState.Playing;
+                DetenerCancion();
+            }
+
+            try
+            {
+                var mp3 = TagFile.Create(ruta);
+
+                // Valores actuales
+                string tituloActual = mp3.Tag.Title ?? "";
+                string artistaActual = mp3.Tag.FirstPerformer ?? "";
+                string albumActual = mp3.Tag.Album ?? "";
+
+                // Crear formulario de edición
+                using (var formEditor = new FormEditarTags(tituloActual, artistaActual, albumActual))
+                {
+                    if (formEditor.ShowDialog() == DialogResult.OK)
+                    {
+                        // Guardar nuevos valores
+                        mp3.Tag.Title = formEditor.Titulo;
+                        mp3.Tag.Performers = new[] { formEditor.Artista };
+                        mp3.Tag.Album = formEditor.Album;
+
+                        mp3.Save();
+
+                        // Actualizar grid
+                        dgvCanciones.Rows[indice].Cells["Titulo"].Value = formEditor.Titulo;
+                        dgvCanciones.Rows[indice].Cells["Artista"].Value = formEditor.Artista;
+                        dgvCanciones.Rows[indice].Cells["Album"].Value = formEditor.Album;
+
+                        MessageBox.Show("Tags actualizados correctamente.");
+                    }
+                }
+
+                // Reanudar reproducción si estaba sonando
+                if (estabaReproduciendo)
+                {
+                    await ReproducirCancion(indiceActual);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al editar tags: {ex.Message}");
+            }
+        }
+
+
 
         private async void btnNext_Click(object sender, EventArgs e)
         {
@@ -593,8 +821,10 @@ namespace Stopify
 
 
 
+
         // TIMER PARA ACTUALIZAR PROGRESO
-        private async void timer1_Tick(object sender, EventArgs e)
+        // ================================
+        private void timer1_Tick(object sender, EventArgs e)
         {
             if (audioFile != null && outputDevice != null && !arrastrandoProgreso)
             {
@@ -602,15 +832,34 @@ namespace Stopify
                 lblTiempoActual.Text = audioFile.CurrentTime.ToString(@"mm\:ss");
             }
 
+            // Detectar cuando termina la canción
             if (audioFile != null && outputDevice != null)
             {
-                if (audioFile.CurrentTime >= audioFile.TotalTime)
+                // Usar un margen de 1 segundo para detectar el final
+                if (audioFile.TotalTime.TotalSeconds - audioFile.CurrentTime.TotalSeconds <= 1.0)
                 {
-                    await CambiarCancion(1);
+                    // Verificar que realmente haya terminado
+                    if (outputDevice.PlaybackState == PlaybackState.Playing)
+                    {
+                        // Llamar de forma asíncrona sin bloquear el timer
+                        _ = Task.Run(async () =>
+                        {
+                            // Esperar a que termine completamente
+                            await Task.Delay(100);
+
+                            // Cambiar a la siguiente canción
+                            this.Invoke((MethodInvoker)async delegate
+                            {
+                                await CambiarCancion(1);
+                            });
+                        });
+
+                        // Detener temporalmente para evitar múltiples llamadas
+                        outputDevice.Pause();
+                    }
                 }
             }
         }
-
 
 
 

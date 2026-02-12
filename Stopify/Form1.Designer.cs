@@ -28,6 +28,12 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnPrev;
 
+        // NUEVOS BOTONES
+        private System.Windows.Forms.Button btnAleatorio;
+        private System.Windows.Forms.Button btnRepetir;
+        private System.Windows.Forms.Button btnEliminarCancion;
+        private System.Windows.Forms.Button btnEditarTags;
+
         private System.Windows.Forms.Timer timer1;
 
         protected override void Dispose(bool disposing)
@@ -66,6 +72,10 @@
             lblVolumen = new Label();
             btnNext = new Button();
             btnPrev = new Button();
+            btnAleatorio = new Button();
+            btnRepetir = new Button();
+            btnEliminarCancion = new Button();
+            btnEditarTags = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)dgvCanciones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbCover).BeginInit();
@@ -328,6 +338,58 @@
             btnPrev.UseVisualStyleBackColor = false;
             btnPrev.Click += btnPrev_Click;
             // 
+            // btnAleatorio
+            // 
+            btnAleatorio.BackColor = Color.LightGray;
+            btnAleatorio.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAleatorio.Location = new Point(434, 573);
+            btnAleatorio.Margin = new Padding(3, 4, 3, 4);
+            btnAleatorio.Name = "btnAleatorio";
+            btnAleatorio.Size = new Size(137, 53);
+            btnAleatorio.TabIndex = 21;
+            btnAleatorio.Text = "🔀 Aleatorio";
+            btnAleatorio.UseVisualStyleBackColor = false;
+            btnAleatorio.Click += btnAleatorio_Click;
+            // 
+            // btnRepetir
+            // 
+            btnRepetir.BackColor = Color.LightGray;
+            btnRepetir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnRepetir.Location = new Point(585, 573);
+            btnRepetir.Margin = new Padding(3, 4, 3, 4);
+            btnRepetir.Name = "btnRepetir";
+            btnRepetir.Size = new Size(137, 53);
+            btnRepetir.TabIndex = 22;
+            btnRepetir.Text = "🔁 Repetir";
+            btnRepetir.UseVisualStyleBackColor = false;
+            btnRepetir.Click += btnRepetir_Click;
+            // 
+            // btnEliminarCancion
+            // 
+            btnEliminarCancion.BackColor = Color.LightCoral;
+            btnEliminarCancion.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            btnEliminarCancion.Location = new Point(800, 16);
+            btnEliminarCancion.Margin = new Padding(3, 4, 3, 4);
+            btnEliminarCancion.Name = "btnEliminarCancion";
+            btnEliminarCancion.Size = new Size(134, 53);
+            btnEliminarCancion.TabIndex = 23;
+            btnEliminarCancion.Text = "❌ Eliminar";
+            btnEliminarCancion.UseVisualStyleBackColor = false;
+            btnEliminarCancion.Click += btnEliminarCancion_Click;
+            // 
+            // btnEditarTags
+            // 
+            btnEditarTags.BackColor = Color.LightBlue;
+            btnEditarTags.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            btnEditarTags.Location = new Point(951, 16);
+            btnEditarTags.Margin = new Padding(3, 4, 3, 4);
+            btnEditarTags.Name = "btnEditarTags";
+            btnEditarTags.Size = new Size(134, 53);
+            btnEditarTags.TabIndex = 24;
+            btnEditarTags.Text = "✏️ Editar Tags";
+            btnEditarTags.UseVisualStyleBackColor = false;
+            btnEditarTags.Click += btnEditarTags_Click;
+            // 
             // timer1
             // 
             timer1.Tick += timer1_Tick;
@@ -340,6 +402,10 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1109, 727);
+            Controls.Add(btnEditarTags);
+            Controls.Add(btnEliminarCancion);
+            Controls.Add(btnRepetir);
+            Controls.Add(btnAleatorio);
             Controls.Add(rtbLyrics);
             Controls.Add(lblLyrics);
             Controls.Add(lblCover);
