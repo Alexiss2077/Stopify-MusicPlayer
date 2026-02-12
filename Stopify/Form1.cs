@@ -41,7 +41,7 @@ namespace Stopify
 
             tbVolumen.Value = 50;
 
-            // HABILITAR DRAG & DROP
+            // HABILITAR DRAG DROP
             ConfigurarDragDrop();
         }
 
@@ -225,7 +225,7 @@ namespace Stopify
             dgvCanciones.DefaultCellStyle.SelectionForeColor = Color.White;
 
             // Filas alternadas
-            dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.DarkSlateGray;
+            dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.SlateGray;
 
             // Bordes
             dgvCanciones.GridColor = Color.Black;
