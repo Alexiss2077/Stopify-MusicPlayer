@@ -33,9 +33,9 @@ namespace Stopify
 
 
         /// ALEATORIO AHUFFLE
-        private bool modoAleatorio = false;  // ← NUEVO
-        private bool modoRepetir = false;    // ← NUEVO
-        private Random random = new Random(); // ← NUEVO
+        private bool modoAleatorio = false;  //
+        private bool modoRepetir = false;    //  NUEV
+        private Random random = new Random(); //  NUEVO
         public Form1()
         {
             InitializeComponent();
@@ -670,7 +670,6 @@ namespace Stopify
 
         // ================================
         // BOTÓN REPETIR UNA CANCIÓN
-        // ================================
         private void btnRepetir_Click(object sender, EventArgs e)
         {
             modoRepetir = !modoRepetir;
@@ -690,7 +689,6 @@ namespace Stopify
 
         // ================================
         // ELIMINAR CANCIÓN SELECCIONADA
-        // ================================
         private void btnEliminarCancion_Click(object sender, EventArgs e)
         {
             if (!ValidarCancionesCargadas()) return;
@@ -745,7 +743,6 @@ namespace Stopify
 
         // ================================
         // EDITAR TAGS DE CANCIÓN
-        // ================================
         private async void btnEditarTags_Click(object sender, EventArgs e)
         {
             if (!ValidarCancionesCargadas()) return;
