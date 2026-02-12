@@ -367,6 +367,10 @@ namespace Stopify
             string titulo = dgvCanciones.Rows[index].Cells["Titulo"].Value.ToString();
             string artista = dgvCanciones.Rows[index].Cells["Artista"].Value.ToString();
 
+            rtbLyrics.Clear();
+
+            await CargarCover(ruta, artista, titulo);
+
             audioFile = new AudioFileReader(ruta);
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
@@ -380,9 +384,9 @@ namespace Stopify
             lblTiempoActual.Text = "00:00";
             lblTiempoTotal.Text = audioFile.TotalTime.ToString(@"mm\:ss");
 
-            rtbLyrics.Clear();
+           // rtbLyrics.Clear();
 
-            await CargarCover(ruta, artista, titulo);
+           // await CargarCover(ruta, artista, titulo);
         }
 
         // CARGAR COVER
@@ -409,7 +413,7 @@ namespace Stopify
                 }
                 else
                 {
-                    await DescargarCoverITunes(artista, titulo);
+                    await DescargarCoverITunes(ruta, artista, titulo);
                 }
             }
             catch
@@ -419,7 +423,7 @@ namespace Stopify
         }
 
 
-        private async Task DescargarCoverITunes(string artista, string titulo)
+        private async Task DescargarCoverITunes(string ruta, string artista, string titulo)
         {
             try
             {
@@ -480,7 +484,7 @@ namespace Stopify
                             }
 
                             //GUARDAR COVER EN EL MP3
-                            await GuardarCoverEnMP3(imgBytes);
+                            await GuardarCoverEnMP3(ruta, imgBytes);
                         }
                         else
                         {
@@ -497,16 +501,16 @@ namespace Stopify
 
         // ================================
         // GUARDAR COVER EN MP3
-        private async Task GuardarCoverEnMP3(byte[] imagenBytes)
+        private async Task GuardarCoverEnMP3(string ruta, byte[] imagenBytes)
         {
             await Task.Run(() =>
             {
                 try
                 {
-                    if (indiceActual < 0 || indiceActual >= dgvCanciones.Rows.Count)
-                        return;
+                    //if (indiceActual < 0 || indiceActual >= dgvCanciones.Rows.Count)
+                    //    return;
 
-                    string ruta = dgvCanciones.Rows[indiceActual].Cells["Ruta"].Value.ToString();
+                    //string ruta = dgvCanciones.Rows[indiceActual].Cells["Ruta"].Value.ToString();
 
                     var mp3 = TagFile.Create(ruta);
 
@@ -1177,7 +1181,7 @@ namespace Stopify
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.Timeout = TimeSpan.FromSeconds(10);
+                    client.Timeout = TimeSpan.FromSeconds(25);
 
                     string url = $"https://api.lyrics.ovh/v1/{Uri.EscapeDataString(artista)}/{Uri.EscapeDataString(titulo)}";
 
