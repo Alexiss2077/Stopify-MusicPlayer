@@ -10,8 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
-//////////////////////////////////ejh
-///
+
 // Alias para evitar conflictos
 using TagFile = TagLib.File;
 using IOFile = System.IO.File;
@@ -25,21 +24,27 @@ namespace Stopify
         private int indiceActual = -1;
         private bool arrastrandoProgreso = false;
 
-        // VARIABLES PARA DRRAAG  DROP
+        // VARIABLES PARA DRAG DROP
         private int rowIndexFromMouseDown;
         private int rowIndexOfItemUnderMouseToDrop;
         private Rectangle dragBoxFromMouseDown;
         private int dragRowIndex = -1;
 
+        // ALEATORIO Y REPETIR
+        private bool modoAleatorio = false;
+        private bool modoRepetir = false;
+        private Random random = new Random();
 
-        /// ALEATORIO AHUFFLE
-        private bool modoAleatorio = false;  //
-        private bool modoRepetir = false;    //  NUEV
-        private Random random = new Random(); //  NUEVO
+        // BUSCADOR DE COVERS MEJORADO
+        private CoverSearcher _coverSearcher;
+
         public Form1()
         {
             InitializeComponent();
             ConfigurarGrid();
+
+            // Inicializar el buscador de covers
+            _coverSearcher = new CoverSearcher();
 
             timer1.Interval = 500;
             timer1.Start();
@@ -50,11 +55,9 @@ namespace Stopify
             ConfigurarDragDrop();
         }
 
-
-
         /// //////////////////////////////////////////////
-        // CONFIGURAR DRAG  DROP
-        ////// EXTRA PENDIENTEEEEEEEE /\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        // CONFIGURAR DRAG & DROP
+        ////// 
         private void ConfigurarDragDrop()
         {
             dgvCanciones.AllowDrop = true;
@@ -65,21 +68,14 @@ namespace Stopify
             dgvCanciones.Paint += dgvCanciones_Paint;  
         }
 
-        ///  //////////////////////////////////////////////////////////////////
-        ///  
-
         // EVENTOS DE DRAG & DROP
         private void dgvCanciones_MouseDown(object sender, MouseEventArgs e)
         {
-            // Obtener el índice de la fila donde se hizo clic
             rowIndexFromMouseDown = dgvCanciones.HitTest(e.X, e.Y).RowIndex;
 
             if (rowIndexFromMouseDown != -1)
             {
-                // Obtener el tamaño del rectángulo de arrastre
                 Size dragSize = SystemInformation.DragSize;
-
-                // Crear un rectángulo alrededor del punto donde se hizo clic
                 dragBoxFromMouseDown = new Rectangle(
                     new Point(e.X - (dragSize.Width / 2), e.Y - (dragSize.Height / 2)),
                     dragSize);
@@ -94,13 +90,11 @@ namespace Stopify
         {
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
-                // Si el mouse se mueve fuera del rectángulo de arrastre, iniciar el drag & drop
                 if (dragBoxFromMouseDown != Rectangle.Empty &&
                     !dragBoxFromMouseDown.Contains(e.X, e.Y))
                 {
                     if (rowIndexFromMouseDown != -1)
                     {
-                        // Iniciar operación de arrastre
                         DataGridViewRow rowToMove = dgvCanciones.Rows[rowIndexFromMouseDown];
                         dgvCanciones.DoDragDrop(rowToMove, DragDropEffects.Move);
                     }
@@ -111,12 +105,8 @@ namespace Stopify
         private void dgvCanciones_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
-
-            // Obtener el punto del mouse
             Point clientPoint = dgvCanciones.PointToClient(new Point(e.X, e.Y));
             dragRowIndex = dgvCanciones.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
-
-            // Redibujar para mostrar el indicador
             dgvCanciones.Invalidate();
         }
 
@@ -124,7 +114,6 @@ namespace Stopify
         {
             if (dragRowIndex >= 0 && dragRowIndex < dgvCanciones.Rows.Count)
             {
-                // Dibujar una línea donde se insertará la canción
                 Graphics g = e.Graphics;
                 Rectangle rect = dgvCanciones.GetRowDisplayRectangle(dragRowIndex, true);
 
@@ -137,44 +126,34 @@ namespace Stopify
 
         private void dgvCanciones_DragDrop(object sender, DragEventArgs e)
         {
-            // Obtener el punto donde se soltó
             Point clientPoint = dgvCanciones.PointToClient(new Point(e.X, e.Y));
-
-            // Obtener el índice de la fila donde se soltó
             rowIndexOfItemUnderMouseToDrop = dgvCanciones.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
 
-            // Si se soltó en una fila válida y no es la misma fila
             if (e.Effect == DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop != -1)
             {
                 DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
 
                 if (rowToMove != null && rowIndexFromMouseDown != rowIndexOfItemUnderMouseToDrop)
                 {
-                    // Guardar los datos de la fila
                     string titulo = rowToMove.Cells["Titulo"].Value.ToString();
                     string artista = rowToMove.Cells["Artista"].Value.ToString();
                     string album = rowToMove.Cells["Album"].Value.ToString();
                     string duracion = rowToMove.Cells["Duracion"].Value.ToString();
                     string ruta = rowToMove.Cells["Ruta"].Value.ToString();
 
-                    // Eliminar la fila de su posición original
                     dgvCanciones.Rows.RemoveAt(rowIndexFromMouseDown);
 
-                    // Ajustar el índice de destino si es necesario
                     int targetIndex = rowIndexOfItemUnderMouseToDrop;
                     if (rowIndexFromMouseDown < rowIndexOfItemUnderMouseToDrop)
                     {
                         targetIndex--;
                     }
 
-                    // Insertar la fila en la nueva posición
                     dgvCanciones.Rows.Insert(targetIndex, titulo, artista, album, duracion, ruta);
 
-                    // Seleccionar la fila movida
                     dgvCanciones.Rows[targetIndex].Selected = true;
                     dgvCanciones.CurrentCell = dgvCanciones.Rows[targetIndex].Cells[0];
 
-                    // Actualizar índice actual si es necesario
                     if (indiceActual == rowIndexFromMouseDown)
                     {
                         indiceActual = targetIndex;
@@ -191,13 +170,6 @@ namespace Stopify
             }
         }
 
-
-        /// /////////////////////////////////////////////////////////////
-        /// 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
         // CONFIGURAR GRID
         private void ConfigurarGrid()
         {
@@ -211,11 +183,6 @@ namespace Stopify
 
             dgvCanciones.Columns["Ruta"].Visible = false;
 
-
-            // PERSONALIZAR ENCABEZADOS   ///// CAMBIOS PENDIENTEEEEE
-            
-
-            // Estilo del encabezado 
             dgvCanciones.ColumnHeadersDefaultCellStyle.BackColor = Color.SlateGray;
             dgvCanciones.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvCanciones.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -223,22 +190,17 @@ namespace Stopify
 
             dgvCanciones.EnableHeadersVisualStyles = false; 
 
-            // Estilo de las filas 
             dgvCanciones.DefaultCellStyle.BackColor = Color.White;
             dgvCanciones.DefaultCellStyle.ForeColor = Color.Black;
-            dgvCanciones.DefaultCellStyle.SelectionBackColor = Color.LimeGreen;  // color de la cancion q se esta sonando
+            dgvCanciones.DefaultCellStyle.SelectionBackColor = Color.LimeGreen;
             dgvCanciones.DefaultCellStyle.SelectionForeColor = Color.White;
 
-            // Filas alternadas
             dgvCanciones.AlternatingRowsDefaultCellStyle.BackColor = Color.SlateGray;
 
-            // Bordes
             dgvCanciones.GridColor = Color.Black;
         }
 
-
         //AGREGAR CANCIÓN AL GRID
-
         private void AgregarCancionAlGrid(string ruta)
         {
             try
@@ -250,8 +212,6 @@ namespace Stopify
                 string album = mp3.Tag.Album ?? "Desconocido";
                 string duracion = mp3.Properties.Duration.ToString(@"mm\:ss");
 
-
-                //LIMPIAR ARTISTA Y TÍTULO
                 artista = LimpiarNombreArtista(artista);
                 titulo = LimpiarTitulo(titulo);
 
@@ -269,7 +229,6 @@ namespace Stopify
             if (string.IsNullOrWhiteSpace(artista))
                 return "Desconocido";
 
-            // Eliminar " - Topic", "VEVO", etc.
             artista = System.Text.RegularExpressions.Regex.Replace(
                 artista,
                 @"\s*-?\s*(Topic|VEVO|Official)$",
@@ -286,7 +245,6 @@ namespace Stopify
             if (string.IsNullOrWhiteSpace(titulo))
                 return "Sin título";
 
-            // Eliminar paréntesis con contenido al final
             titulo = System.Text.RegularExpressions.Regex.Replace(
                 titulo,
                 @"\s*\([^)]*?(Official|Audio|Video|Lyrics|Lyric|Music Video|HD|4K|Visualizer|Explicit|Clean|Remaster)[^)]*?\)",
@@ -294,7 +252,6 @@ namespace Stopify
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
             );
 
-            // Eliminar corchetes con contenido al final
             titulo = System.Text.RegularExpressions.Regex.Replace(
                 titulo,
                 @"\s*\[[^\]]*?(Official|Audio|Video|Lyrics|Lyric|Music Video|HD|4K|Visualizer|Explicit|Clean|Remaster)[^\]]*?\]",
@@ -302,7 +259,6 @@ namespace Stopify
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
             );
 
-            // Eliminar texto suelto al final sin paréntesis
             titulo = System.Text.RegularExpressions.Regex.Replace(
                 titulo,
                 @"\s*-?\s*(Official Audio|Official Video|Music Video|Official Music Video|Lyrics|Lyric Video|Official Lyric Video|Audio|Video|Visualizer|Explicit|Clean|Remastered)$",
@@ -312,7 +268,6 @@ namespace Stopify
 
             return titulo.Trim();
         }
-
 
         // ABRIR CARPETA Y CARGAR MP3
         private void btnAbrirCarpeta_Click(object sender, EventArgs e)
@@ -344,9 +299,7 @@ namespace Stopify
             }
         }
 
-
         // REPRODUCIR SELECCIONADO
-  
         private async void dgvCanciones_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -383,13 +336,9 @@ namespace Stopify
 
             lblTiempoActual.Text = "00:00";
             lblTiempoTotal.Text = audioFile.TotalTime.ToString(@"mm\:ss");
-
-           // rtbLyrics.Clear();
-
-           // await CargarCover(ruta, artista, titulo);
         }
 
-        // CARGAR COVER
+        // CARGAR COVER - MEJORADO
         private async Task CargarCover(string ruta, string artista, string titulo)
         {
             // Liberar imagen anterior
@@ -403,6 +352,7 @@ namespace Stopify
             {
                 var mp3 = TagFile.Create(ruta);
 
+                // Intentar cargar desde metadata primero
                 if (mp3.Tag.Pictures.Length > 0)
                 {
                     var bin = mp3.Tag.Pictures[0].Data.Data;
@@ -413,7 +363,8 @@ namespace Stopify
                 }
                 else
                 {
-                    await DescargarCoverITunes(ruta, artista, titulo);
+                    // Buscar en internet con el nuevo buscador
+                    await BuscarYDescargarCover(ruta, artista, titulo);
                 }
             }
             catch
@@ -422,75 +373,44 @@ namespace Stopify
             }
         }
 
-
-        private async Task DescargarCoverITunes(string ruta, string artista, string titulo)
+        // BUSCAR Y DESCARGAR COVER - VERSIÓN MEJORADA
+        private async Task BuscarYDescargarCover(string ruta, string artista, string titulo)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
+                pbCover.Text = "Buscando portada...";
+                pbCover.Refresh();
+
+                // Usar el nuevo buscador
+                var resultado = await _coverSearcher.BuscarMejorCover(artista, titulo);
+
+                if (resultado != null && resultado.Similitud > 0.5)
                 {
-                    client.Timeout = TimeSpan.FromSeconds(10);
-
-                    string artistaLimpio = ExtraerArtistaPrincipal(artista);
-                    artistaLimpio = NormalizarTexto(artistaLimpio);
-                    string tituloLimpio = NormalizarTexto(titulo);
-
-                    string query = Uri.EscapeDataString($"{artistaLimpio} {tituloLimpio}");
-                    string url = $"https://itunes.apple.com/search?term={query}&limit=10&entity=song";
-
-                    string json = await client.GetStringAsync(url);
-
-                    using (JsonDocument doc = JsonDocument.Parse(json))
+                    using (HttpClient client = new HttpClient())
                     {
-                        var results = doc.RootElement.GetProperty("results");
+                        client.Timeout = TimeSpan.FromSeconds(10);
 
-                        if (results.GetArrayLength() == 0)
+                        try
                         {
-                            pbCover.Image = null;
-                            return;
-                        }
-
-                        double mejorScore = 0;
-                        string mejorCoverUrl = null;
-
-                        for (int i = 0; i < results.GetArrayLength(); i++)
-                        {
-                            var item = results[i];
-
-                            string artistaAPI = NormalizarTexto(item.GetProperty("artistName").GetString());
-                            string tituloAPI = NormalizarTexto(item.GetProperty("trackName").GetString());
-
-                            double scoreArtista = CalcularSimilitud(artistaLimpio, artistaAPI);
-                            double scoreTitulo = CalcularSimilitud(tituloLimpio, tituloAPI);
-
-                            double scoreTotal = (scoreTitulo * 0.7) + (scoreArtista * 0.3);
-
-                            if (scoreTotal > mejorScore)
-                            {
-                                mejorScore = scoreTotal;
-                                mejorCoverUrl = item.GetProperty("artworkUrl100").GetString();
-                            }
-                        }
-
-                        if (mejorScore >= 0.60 && mejorCoverUrl != null)
-                        {
-                            string coverUrl = mejorCoverUrl.Replace("100x100", "600x600");
-
-                            byte[] imgBytes = await client.GetByteArrayAsync(coverUrl);
+                            byte[] imgBytes = await client.GetByteArrayAsync(resultado.Url);
 
                             using (var ms = new MemoryStream(imgBytes))
                             {
                                 pbCover.Image = Image.FromStream(ms);
                             }
 
-                            //GUARDAR COVER EN EL MP3
+                            // Guardar cover en el MP3
                             await GuardarCoverEnMP3(ruta, imgBytes);
                         }
-                        else
+                        catch
                         {
-                            pbCover.Image = null;
+                            pbCover.Text = "Error descargando";
                         }
                     }
+                }
+                else
+                {
+                    pbCover.Text = "No encontrado";
                 }
             }
             catch
@@ -499,7 +419,6 @@ namespace Stopify
             }
         }
 
-        // ================================
         // GUARDAR COVER EN MP3
         private async Task GuardarCoverEnMP3(string ruta, byte[] imagenBytes)
         {
@@ -507,14 +426,8 @@ namespace Stopify
             {
                 try
                 {
-                    //if (indiceActual < 0 || indiceActual >= dgvCanciones.Rows.Count)
-                    //    return;
-
-                    //string ruta = dgvCanciones.Rows[indiceActual].Cells["Ruta"].Value.ToString();
-
                     var mp3 = TagFile.Create(ruta);
 
-                    // Crear picture
                     var picture = new TagLib.Picture(imagenBytes)
                     {
                         Type = TagLib.PictureType.FrontCover,
@@ -522,10 +435,7 @@ namespace Stopify
                         Description = "Cover"
                     };
 
-                    // Asignar al MP3
                     mp3.Tag.Pictures = new TagLib.IPicture[] { picture };
-
-                    // Guardar
                     mp3.Save();
                 }
                 catch
@@ -535,12 +445,9 @@ namespace Stopify
             });
         }
 
-
         // MÉTODO DE VALIDACIÓN 
-
         private bool ValidarCancionesCargadas()
         {
-
             if (dgvCanciones.Rows.Count == 0)
             {
                 MessageBox.Show("Por favor, selecciona una carpeta primero.",
@@ -555,7 +462,6 @@ namespace Stopify
         // BOTONES PLAY PAUSE STOP
         private async void btnPlay_Click(object sender, EventArgs e)
         {
-
             if (!ValidarCancionesCargadas()) return;
             if (outputDevice == null || audioFile == null)
             {
@@ -568,8 +474,6 @@ namespace Stopify
             }
 
             outputDevice.Play();
-
-            
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -584,7 +488,6 @@ namespace Stopify
             DetenerCancion();
         }
 
-        // ================================
         // BOTÓN ALEATORIO (SHUFFLE)
         private void btnAleatorio_Click(object sender, EventArgs e)
         {
@@ -592,12 +495,12 @@ namespace Stopify
 
             if (modoAleatorio)
             {
-                btnAleatorio.BackColor = Color.Green; // Visual: activado
+                btnAleatorio.BackColor = Color.Green;
                 btnAleatorio.Text = "🔀 ON";
             }
             else
             {
-                btnAleatorio.BackColor = SystemColors.Control; // Visual: desactivado
+                btnAleatorio.BackColor = SystemColors.Control;
                 btnAleatorio.Text = "🔀 Aleatorio";
             }
         }
@@ -621,40 +524,31 @@ namespace Stopify
             lblTiempoActual.Text = "00:00";
         }
 
-        // NEXT / PREv
-        // ================================
         // CAMBIAR CANCIÓN (MODIFICADO)
-        // ================================
         private async Task CambiarCancion(int direccion)
         {
             if (dgvCanciones.Rows.Count == 0) return;
 
-            // SI ESTÁ EN MODO REPETIR UNA CANCIÓN
             if (modoRepetir)
             {
-                // Reproducir la misma canción
                 await ReproducirCancion(indiceActual);
                 return;
             }
 
-            // SI ESTÁ EN MODO ALEATORIO
             if (modoAleatorio)
             {
-                // Seleccionar índice aleatorio
                 int nuevoIndice;
                 do
                 {
                     nuevoIndice = random.Next(0, dgvCanciones.Rows.Count);
-                } while (nuevoIndice == indiceActual && dgvCanciones.Rows.Count > 1); // Evitar repetir la misma
+                } while (nuevoIndice == indiceActual && dgvCanciones.Rows.Count > 1);
 
                 indiceActual = nuevoIndice;
             }
             else
             {
-                // MODO NORMAL: siguiente o anterior
                 indiceActual += direccion;
 
-                // Circular
                 if (indiceActual >= dgvCanciones.Rows.Count)
                     indiceActual = 0;
                 else if (indiceActual < 0)
@@ -667,8 +561,6 @@ namespace Stopify
             await ReproducirCancion(indiceActual);
         }
 
-
-        // ================================
         // BOTÓN REPETIR UNA CANCIÓN
         private void btnRepetir_Click(object sender, EventArgs e)
         {
@@ -676,18 +568,16 @@ namespace Stopify
 
             if (modoRepetir)
             {
-                btnRepetir.BackColor = Color.Orange; // Visual: activado
+                btnRepetir.BackColor = Color.Orange;
                 btnRepetir.Text = "🔂 ON";
             }
             else
             {
-                btnRepetir.BackColor = SystemColors.Control; // Visual: desactivado
+                btnRepetir.BackColor = SystemColors.Control;
                 btnRepetir.Text = "🔁 Repetir";
             }
         }
 
-
-        // ================================
         // ELIMINAR CANCIÓN SELECCIONADA
         private void btnEliminarCancion_Click(object sender, EventArgs e)
         {
@@ -712,36 +602,27 @@ namespace Stopify
 
             if (resultado == DialogResult.Yes)
             {
-                // Si se está reproduciendo esta canción, detener
                 if (indiceActual == indiceEliminar)
                 {
                     DetenerCancion();
                     indiceActual = -1;
                 }
 
-                // Eliminar de la lista
                 dgvCanciones.Rows.RemoveAt(indiceEliminar);
 
-                // Ajustar índice actual
                 if (indiceActual > indiceEliminar)
                 {
                     indiceActual--;
                 }
 
-                // Seleccionar siguiente canción si hay
                 if (dgvCanciones.Rows.Count > 0)
                 {
                     int nuevoIndice = Math.Min(indiceEliminar, dgvCanciones.Rows.Count - 1);
                     dgvCanciones.Rows[nuevoIndice].Selected = true;
                 }
-                else
-                {
-                    //ActualizarEstadoBotones();
-                }
             }
         }
 
-        // ================================
         // EDITAR TAGS DE CANCIÓN
         private async void btnEditarTags_Click(object sender, EventArgs e)
         {
@@ -756,7 +637,6 @@ namespace Stopify
             int indice = dgvCanciones.SelectedRows[0].Index;
             string ruta = dgvCanciones.Rows[indice].Cells["Ruta"].Value.ToString();
 
-            // Detener reproducción si es la canción actual
             bool estabaReproduciendo = false;
             if (audioFile != null && indice == indiceActual)
             {
@@ -768,24 +648,20 @@ namespace Stopify
             {
                 var mp3 = TagFile.Create(ruta);
 
-                // Valores actuales
                 string tituloActual = mp3.Tag.Title ?? "";
                 string artistaActual = mp3.Tag.FirstPerformer ?? "";
                 string albumActual = mp3.Tag.Album ?? "";
 
-                // Crear formulario de edición
                 using (var formEditor = new FormEditarTags(tituloActual, artistaActual, albumActual))
                 {
                     if (formEditor.ShowDialog() == DialogResult.OK)
                     {
-                        // Guardar nuevos valores
                         mp3.Tag.Title = formEditor.Titulo;
                         mp3.Tag.Performers = new[] { formEditor.Artista };
                         mp3.Tag.Album = formEditor.Album;
 
                         mp3.Save();
 
-                        // Actualizar grid
                         dgvCanciones.Rows[indice].Cells["Titulo"].Value = formEditor.Titulo;
                         dgvCanciones.Rows[indice].Cells["Artista"].Value = formEditor.Artista;
                         dgvCanciones.Rows[indice].Cells["Album"].Value = formEditor.Album;
@@ -794,7 +670,6 @@ namespace Stopify
                     }
                 }
 
-                // Reanudar reproducción si estaba sonando
                 if (estabaReproduciendo)
                 {
                     await ReproducirCancion(indiceActual);
@@ -806,8 +681,6 @@ namespace Stopify
             }
         }
 
-
-
         private async void btnNext_Click(object sender, EventArgs e)
         {
             if (!ValidarCancionesCargadas()) return;
@@ -817,14 +690,10 @@ namespace Stopify
         private async void btnPrev_Click(object sender, EventArgs e)
         {
             if (!ValidarCancionesCargadas()) return;
-            await CambiarCancion(-1);   // Cambiar a la canción anterior
+            await CambiarCancion(-1);
         }
 
-
-
-
         // TIMER PARA ACTUALIZAR PROGRESO
-        // ================================
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (audioFile != null && outputDevice != null && !arrastrandoProgreso)
@@ -836,33 +705,25 @@ namespace Stopify
             // Detectar cuando termina la canción
             if (audioFile != null && outputDevice != null)
             {
-                // Usar un margen de 1 segundo para detectar el final
                 if (audioFile.TotalTime.TotalSeconds - audioFile.CurrentTime.TotalSeconds <= 1.0)
                 {
-                    // Verificar que realmente haya terminado
                     if (outputDevice.PlaybackState == PlaybackState.Playing)
                     {
-                        // Llamar de forma asíncrona sin bloquear el timer
                         _ = Task.Run(async () =>
                         {
-                            // Esperar a que termine completamente
                             await Task.Delay(100);
 
-                            // Cambiar a la siguiente canción
                             this.Invoke((MethodInvoker)async delegate
                             {
                                 await CambiarCancion(1);
                             });
                         });
 
-                        // Detener temporalmente para evitar múltiples llamadas
                         outputDevice.Pause();
                     }
                 }
             }
         }
-
-
 
         // TRACKBAR VOLUMEN
         private void tbVolumen_Scroll(object sender, EventArgs e)
@@ -872,8 +733,6 @@ namespace Stopify
                 outputDevice.Volume = tbVolumen.Value / 100f;
             }
         }
-
-
 
         // TRACKBAR PROGRESO
         private void tbProgreso_MouseDown(object sender, MouseEventArgs e)
@@ -891,9 +750,7 @@ namespace Stopify
             arrastrandoProgreso = false;
         }
 
-       
-        
-        // GUARDAR playlist TXT
+        // GUARDAR PLAYLIST TXT
         private void btnGuardarPlaylist_Click(object sender, EventArgs e)
         {
             if (dgvCanciones.Rows.Count == 0)
@@ -918,10 +775,7 @@ namespace Stopify
             }
         }
 
-
-
-
-        // CARGAR playlist TXT
+        // CARGAR PLAYLIST TXT
         private void btnCargarPlaylist_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -958,9 +812,6 @@ namespace Stopify
             MessageBox.Show("Playlist cargada correctamente.");
         }
 
-
-
-
         // ABRIR EN WINDOWS MEDIA PLAYER
         private void btnAbrirWMP_Click(object sender, EventArgs e)
         {
@@ -976,177 +827,12 @@ namespace Stopify
             {
                 System.Diagnostics.Process.Start("wmplayer.exe", $"\"{ruta}\"");
                 outputDevice?.Pause();
-               // System.Diagnostics.Process.
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error abriendo WMP: " + ex.Message);
             }
         }
-
-        // EXTRAER ARTISTA PRINCIPAL para MEJORAR BÚSQUEDAS DE COVER 
-        private string ExtraerArtistaPrincipal(string artista)
-        {
-            if (string.IsNullOrWhiteSpace(artista))
-                return "";
-
-            // Separadores comunes de featurings
-            string[] separadores = { " feat.", " feat ", " ft.", " ft ", " featuring ", " & ", " and ", "," };
-
-            string resultado = artista;
-
-            foreach (var sep in separadores)
-            {
-                int index = resultado.IndexOf(sep, StringComparison.OrdinalIgnoreCase);
-                if (index > 0)
-                {
-                    resultado = resultado.Substring(0, index);
-                    break;
-                }
-            }
-
-            return resultado.Trim();
-        }
-
-
-
-        // NORMALIZAR TEXTO
-        private string NormalizarTexto(string texto)
-        {
-            if (string.IsNullOrWhiteSpace(texto))
-                return "";
-
-            texto = texto.Replace("\r", "").Replace("\n", "").Trim().ToLower();
-
-            // quitar acentos
-            string normalized = texto.Normalize(NormalizationForm.FormD);
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char c in normalized)
-            {
-                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                    sb.Append(c);
-            }
-
-            texto = sb.ToString().Normalize(NormalizationForm.FormC);
-
-            // quitar texto basura
-            string[] basura =
-            {
-                "feat.", "ft.", "featuring", "remix", "official", "video", "audio",
-                "lyrics", "letra", "hq", "4k", "prod.", "producer", "album version",
-                "version", "edit", "extended", "radio edit"
-            };
-
-            foreach (var b in basura)
-            {
-                int index = texto.IndexOf(b);
-                if (index != -1)
-                    texto = texto.Substring(0, index);
-            }
-
-            // quitar paréntesis
-            while (texto.Contains("(") && texto.Contains(")"))
-            {
-                int a = texto.IndexOf("(");
-                int b = texto.IndexOf(")");
-
-                if (b > a)
-                    texto = texto.Remove(a, b - a + 1);
-                else break;
-            }
-
-            // quitar corchetes
-            while (texto.Contains("[") && texto.Contains("]"))
-            {
-                int a = texto.IndexOf("[");
-                int b = texto.IndexOf("]");
-
-                if (b > a)
-                    texto = texto.Remove(a, b - a + 1);
-                else break;
-            }
-
-            // quitar símbolos comunes
-            texto = texto.Replace("&", "and");
-            texto = texto.Replace("'", "");
-            texto = texto.Replace("\"", "");
-            texto = texto.Replace(".", "");
-            texto = texto.Replace(",", "");
-            texto = texto.Replace(":", "");
-            texto = texto.Replace(";", "");
-            texto = texto.Replace("-", " ");
-
-            // quitar doble espacios
-            while (texto.Contains("  "))
-                texto = texto.Replace("  ", " ");
-
-            return texto.Trim();
-        }
-
-        // CALCULAR SIMILITUD ENTRE TEXTOS
-        private double CalcularSimilitud(string texto1, string texto2)//////////////////////8362bf¡¡'//+_.;1|.
-        {
-            if (string.IsNullOrEmpty(texto1) || string.IsNullOrEmpty(texto2))
-                return 0;
-
-            // Si son idénticos
-            if (texto1 == texto2)
-                return 1.0;
-
-            // Dividir en palabras
-            var palabras1 = texto1.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var palabras2 = texto2.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            // Contar palabras en común
-            int palabrasComunes = palabras1.Intersect(palabras2).Count();
-            int totalPalabras = Math.Max(palabras1.Length, palabras2.Length);
-
-            if (totalPalabras == 0)
-                return 0;
-
-            double similitudPalabras = (double)palabrasComunes / totalPalabras;
-
-            // Calcular similitud de Levenshtein
-            int distancia = DistanciaLevenshtein(texto1, texto2);
-            int maxLongitud = Math.Max(texto1.Length, texto2.Length);
-            double similitudCaracteres = 1.0 - ((double)distancia / maxLongitud);
-
-            // Combinar ambas métricas
-            return (similitudPalabras * 0.6) + (similitudCaracteres * 0.4);
-        }
-
-
-
-        // DISTANCIA LEVENSHTEIN
-        private int DistanciaLevenshtein(string s1, string s2)
-        {
-            int[,] d = new int[s1.Length + 1, s2.Length + 1];
-
-            for (int i = 0; i <= s1.Length; i++)
-                d[i, 0] = i;
-
-            for (int j = 0; j <= s2.Length; j++)
-                d[0, j] = j;
-
-            for (int j = 1; j <= s2.Length; j++)
-            {
-                for (int i = 1; i <= s1.Length; i++)
-                {
-                    int cost = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
-
-                    d[i, j] = Math.Min(
-                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
-                        d[i - 1, j - 1] + cost
-                    );
-                }
-            }
-
-            return d[s1.Length, s2.Length];
-        }
-
-
-
 
         // BUSCAR LETRA API lyrics.ovh
         private async void btnLetra_Click(object sender, EventArgs e)
@@ -1161,9 +847,8 @@ namespace Stopify
             string titulo = dgvCanciones.SelectedRows[0].Cells["Titulo"].Value.ToString();
 
             artista = ExtraerArtistaPrincipal(artista);
-
-            artista = NormalizarTexto(artista);
-            titulo = NormalizarTexto(titulo);
+            artista = _coverSearcher.NormalizarTexto(artista);
+            titulo = _coverSearcher.NormalizarTexto(titulo);
 
             if (string.IsNullOrWhiteSpace(artista) || string.IsNullOrWhiteSpace(titulo))
             {
@@ -1218,6 +903,29 @@ namespace Stopify
             {
                 btnLetra.Enabled = true;
             }
+        }
+
+        // EXTRAER ARTISTA PRINCIPAL
+        private string ExtraerArtistaPrincipal(string artista)
+        {
+            if (string.IsNullOrWhiteSpace(artista))
+                return "";
+
+            string[] separadores = { " feat.", " feat ", " ft.", " ft ", " featuring ", " & ", " and ", "," };
+
+            string resultado = artista;
+
+            foreach (var sep in separadores)
+            {
+                int index = resultado.IndexOf(sep, StringComparison.OrdinalIgnoreCase);
+                if (index > 0)
+                {
+                    resultado = resultado.Substring(0, index);
+                    break;
+                }
+            }
+
+            return resultado.Trim();
         }
     }
 }
