@@ -5,43 +5,41 @@
         private System.ComponentModel.IContainer components = null;
 
         private System.Windows.Forms.DataGridView dgvCanciones;
-        private System.Windows.Forms.Button btnAbrirCarpeta;
-        private System.Windows.Forms.Button btnPlay;
-        private System.Windows.Forms.Button btnPause;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Button btnGuardarPlaylist;
-        private System.Windows.Forms.Button btnCargarPlaylist;
-        private System.Windows.Forms.Button btnAbrirWMP;
-        private System.Windows.Forms.Button btnLetra;
+
+        // Todos los botones ahora son CustomButton
+        private CustomButton btnAbrirCarpeta;
+        private CustomButton btnPlayPause;
+        private CustomButton btnStop;
+        private CustomButton btnPrev;
+        private CustomButton btnNext;
+        private CustomButton btnAleatorio;
+        private CustomButton btnRepetir;
+        private CustomButton btnGuardarPlaylist;
+        private CustomButton btnCargarPlaylist;
+        private CustomButton btnAbrirWMP;
+        private CustomButton btnLetra;
+        private CustomButton btnEliminarCancion;
+        private CustomButton btnEditarTags;
+
         private System.Windows.Forms.PictureBox pbCover;
         private System.Windows.Forms.RichTextBox rtbLyrics;
         private System.Windows.Forms.Label lblCanciones;
         private System.Windows.Forms.Label lblCover;
         private System.Windows.Forms.Label lblLyrics;
 
-        private System.Windows.Forms.TrackBar tbProgreso;
-        private System.Windows.Forms.TrackBar tbVolumen;
+        private CustomTrackBar tbProgreso;
+        private CustomTrackBar tbVolumen;
+
         private System.Windows.Forms.Label lblTiempoActual;
         private System.Windows.Forms.Label lblTiempoTotal;
         private System.Windows.Forms.Label lblVolumen;
-
-        private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.Button btnPrev;
-
-        // NUEVOS BOTONES
-        private System.Windows.Forms.Button btnAleatorio;
-        private System.Windows.Forms.Button btnRepetir;
-        private System.Windows.Forms.Button btnEliminarCancion;
-        private System.Windows.Forms.Button btnEditarTags;
 
         private System.Windows.Forms.Timer timer1;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -50,358 +48,378 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            dgvCanciones = new DataGridView();
-            btnAbrirCarpeta = new Button();
-            btnPlay = new Button();
-            btnPause = new Button();
-            btnStop = new Button();
-            btnGuardarPlaylist = new Button();
-            btnCargarPlaylist = new Button();
-            btnAbrirWMP = new Button();
-            btnLetra = new Button();
-            pbCover = new PictureBox();
-            rtbLyrics = new RichTextBox();
-            lblCanciones = new Label();
-            lblCover = new Label();
-            lblLyrics = new Label();
-            tbProgreso = new TrackBar();
-            tbVolumen = new TrackBar();
-            lblTiempoActual = new Label();
-            lblTiempoTotal = new Label();
-            lblVolumen = new Label();
-            btnNext = new Button();
-            btnPrev = new Button();
-            btnAleatorio = new Button();
-            btnRepetir = new Button();
-            btnEliminarCancion = new Button();
-            btnEditarTags = new Button();
+            System.ComponentModel.ComponentResourceManager resources =
+                new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+
+            // Instancias
+            dgvCanciones = new System.Windows.Forms.DataGridView();
+            btnAbrirCarpeta = new CustomButton();
+            btnPlayPause = new CustomButton();
+            btnStop = new CustomButton();
+            btnPrev = new CustomButton();
+            btnNext = new CustomButton();
+            btnAleatorio = new CustomButton();
+            btnRepetir = new CustomButton();
+            btnGuardarPlaylist = new CustomButton();
+            btnCargarPlaylist = new CustomButton();
+            btnAbrirWMP = new CustomButton();
+            btnLetra = new CustomButton();
+            btnEliminarCancion = new CustomButton();
+            btnEditarTags = new CustomButton();
+            pbCover = new System.Windows.Forms.PictureBox();
+            rtbLyrics = new System.Windows.Forms.RichTextBox();
+            lblCanciones = new System.Windows.Forms.Label();
+            lblCover = new System.Windows.Forms.Label();
+            lblLyrics = new System.Windows.Forms.Label();
+            tbProgreso = new CustomTrackBar();
+            tbVolumen = new CustomTrackBar();
+            lblTiempoActual = new System.Windows.Forms.Label();
+            lblTiempoTotal = new System.Windows.Forms.Label();
+            lblVolumen = new System.Windows.Forms.Label();
             timer1 = new System.Windows.Forms.Timer(components);
+
             ((System.ComponentModel.ISupportInitialize)dgvCanciones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbCover).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tbProgreso).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tbVolumen).BeginInit();
             SuspendLayout();
-            // 
-            // dgvCanciones
-            // 
+
+            // ── dgvCanciones ──────────────────────────────────────────────────
             dgvCanciones.AllowUserToAddRows = false;
             dgvCanciones.AllowUserToDeleteRows = false;
-            dgvCanciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvCanciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvCanciones.BackgroundColor = Color.FromArgb(64, 64, 64);
-            dgvCanciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanciones.Location = new Point(14, 107);
-            dgvCanciones.Margin = new Padding(3, 4, 3, 4);
+            dgvCanciones.Anchor = System.Windows.Forms.AnchorStyles.Top
+                                                     | System.Windows.Forms.AnchorStyles.Bottom
+                                                     | System.Windows.Forms.AnchorStyles.Left
+                                                     | System.Windows.Forms.AnchorStyles.Right;
+            dgvCanciones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCanciones.BackgroundColor = System.Drawing.Color.FromArgb(28, 28, 28);
+            dgvCanciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCanciones.Location = new System.Drawing.Point(14, 107);
             dgvCanciones.MultiSelect = false;
             dgvCanciones.Name = "dgvCanciones";
             dgvCanciones.ReadOnly = true;
             dgvCanciones.RowHeadersVisible = false;
-            dgvCanciones.RowHeadersWidth = 51;
-            dgvCanciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCanciones.Size = new Size(766, 360);
+            dgvCanciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            dgvCanciones.Size = new System.Drawing.Size(766, 355);
             dgvCanciones.TabIndex = 0;
             dgvCanciones.CellDoubleClick += dgvCanciones_CellDoubleClick;
-            // 
+
+            // ── FILA 1: Controles de sesión (Y=14) ───────────────────────────
+
             // btnAbrirCarpeta
-            // 
-            btnAbrirCarpeta.BackColor = Color.LightGray;
-            btnAbrirCarpeta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAbrirCarpeta.Location = new Point(14, 16);
-            btnAbrirCarpeta.Margin = new Padding(3, 4, 3, 4);
+            btnAbrirCarpeta.Location = new System.Drawing.Point(14, 14);
+            btnAbrirCarpeta.Size = new System.Drawing.Size(155, 46);
+            btnAbrirCarpeta.Text = "📂  Abrir Carpeta";
+            btnAbrirCarpeta.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnAbrirCarpeta.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnAbrirCarpeta.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnAbrirCarpeta.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnAbrirCarpeta.ForeColor = System.Drawing.Color.White;
+            btnAbrirCarpeta.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnAbrirCarpeta.CornerRadius = 8;
             btnAbrirCarpeta.Name = "btnAbrirCarpeta";
-            btnAbrirCarpeta.Size = new Size(171, 53);
             btnAbrirCarpeta.TabIndex = 1;
-            btnAbrirCarpeta.Text = "Abrir Carpeta 📂";
-            btnAbrirCarpeta.UseVisualStyleBackColor = false;
             btnAbrirCarpeta.Click += btnAbrirCarpeta_Click;
-            // 
-            // btnPlay
-            // 
-            btnPlay.BackColor = Color.LightGray;
-            btnPlay.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPlay.Location = new Point(206, 16);
-            btnPlay.Margin = new Padding(3, 4, 3, 4);
-            btnPlay.Name = "btnPlay";
-            btnPlay.Size = new Size(103, 53);
-            btnPlay.TabIndex = 2;
-            btnPlay.Text = "Play ▶";
-            btnPlay.UseVisualStyleBackColor = false;
-            btnPlay.Click += btnPlay_Click;
-            // 
-            // btnPause
-            // 
-            btnPause.BackColor = Color.LightGray;
-            btnPause.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPause.Location = new Point(320, 16);
-            btnPause.Margin = new Padding(3, 4, 3, 4);
-            btnPause.Name = "btnPause";
-            btnPause.Size = new Size(103, 53);
-            btnPause.TabIndex = 3;
-            btnPause.Text = "Pause ⏸";
-            btnPause.UseVisualStyleBackColor = false;
-            btnPause.Click += btnPause_Click;
-            // 
+
+            // btnPlayPause — acento verde, más grande
+            btnPlayPause.Location = new System.Drawing.Point(182, 14);
+            btnPlayPause.Size = new System.Drawing.Size(148, 46);
+            btnPlayPause.Text = "▶   Play";
+            btnPlayPause.NormalColor = System.Drawing.Color.FromArgb(30, 160, 30);
+            btnPlayPause.HoverColor = System.Drawing.Color.FromArgb(40, 200, 40);
+            btnPlayPause.PressColor = System.Drawing.Color.FromArgb(18, 110, 18);
+            btnPlayPause.BorderColor = System.Drawing.Color.FromArgb(20, 130, 20);
+            btnPlayPause.ForeColor = System.Drawing.Color.White;
+            btnPlayPause.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            btnPlayPause.CornerRadius = 8;
+            btnPlayPause.Name = "btnPlayPause";
+            btnPlayPause.TabIndex = 2;
+            btnPlayPause.Click += btnPlayPause_Click;
+
             // btnStop
-            // 
-            btnStop.BackColor = Color.LightGray;
-            btnStop.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnStop.Location = new Point(434, 16);
-            btnStop.Margin = new Padding(3, 4, 3, 4);
+            btnStop.Location = new System.Drawing.Point(343, 14);
+            btnStop.Size = new System.Drawing.Size(90, 46);
+            btnStop.Text = "⏹  Stop";
+            btnStop.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnStop.HoverColor = System.Drawing.Color.FromArgb(90, 28, 28);
+            btnStop.PressColor = System.Drawing.Color.FromArgb(60, 15, 15);
+            btnStop.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnStop.ForeColor = System.Drawing.Color.FromArgb(210, 210, 210);
+            btnStop.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnStop.CornerRadius = 8;
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(103, 53);
-            btnStop.TabIndex = 4;
-            btnStop.Text = "Stop ⏹";
-            btnStop.UseVisualStyleBackColor = false;
+            btnStop.TabIndex = 3;
             btnStop.Click += btnStop_Click;
-            // 
-            // btnGuardarPlaylist
-            // 
-            btnGuardarPlaylist.BackColor = Color.LightGray;
-            btnGuardarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnGuardarPlaylist.Location = new Point(14, 647);
-            btnGuardarPlaylist.Margin = new Padding(3, 4, 3, 4);
-            btnGuardarPlaylist.Name = "btnGuardarPlaylist";
-            btnGuardarPlaylist.Size = new Size(171, 53);
-            btnGuardarPlaylist.TabIndex = 13;
-            btnGuardarPlaylist.Text = "Guardar Playlist 💾";
-            btnGuardarPlaylist.UseVisualStyleBackColor = false;
-            btnGuardarPlaylist.Click += btnGuardarPlaylist_Click;
-            // 
-            // btnCargarPlaylist
-            // 
-            btnCargarPlaylist.BackColor = Color.LightGray;
-            btnCargarPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCargarPlaylist.Location = new Point(206, 647);
-            btnCargarPlaylist.Margin = new Padding(3, 4, 3, 4);
-            btnCargarPlaylist.Name = "btnCargarPlaylist";
-            btnCargarPlaylist.Size = new Size(171, 53);
-            btnCargarPlaylist.TabIndex = 14;
-            btnCargarPlaylist.Text = "Cargar Playlist 📂";
-            btnCargarPlaylist.UseVisualStyleBackColor = false;
-            btnCargarPlaylist.Click += btnCargarPlaylist_Click;
-            // 
-            // btnAbrirWMP
-            // 
-            btnAbrirWMP.BackColor = Color.LightGray;
-            btnAbrirWMP.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAbrirWMP.Location = new Point(400, 647);
-            btnAbrirWMP.Margin = new Padding(3, 4, 3, 4);
-            btnAbrirWMP.Name = "btnAbrirWMP";
-            btnAbrirWMP.Size = new Size(171, 53);
-            btnAbrirWMP.TabIndex = 15;
-            btnAbrirWMP.Text = "Abrir en WMP 🎵";
-            btnAbrirWMP.UseVisualStyleBackColor = false;
-            btnAbrirWMP.Click += btnAbrirWMP_Click;
-            // 
-            // btnLetra
-            // 
-            btnLetra.BackColor = Color.LightGray;
-            btnLetra.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnLetra.Location = new Point(585, 647);
-            btnLetra.Margin = new Padding(3, 4, 3, 4);
-            btnLetra.Name = "btnLetra";
-            btnLetra.Size = new Size(194, 53);
-            btnLetra.TabIndex = 16;
-            btnLetra.Text = "Buscar Letra 🎤";
-            btnLetra.UseVisualStyleBackColor = false;
-            btnLetra.Click += btnLetra_Click;
-            // 
-            // pbCover
-            // 
-            pbCover.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pbCover.BackColor = Color.GreenYellow;
-            pbCover.BorderStyle = BorderStyle.FixedSingle;
-            pbCover.Location = new Point(800, 75);
-            pbCover.Margin = new Padding(3, 4, 3, 4);
-            pbCover.Name = "pbCover";
-            pbCover.Size = new Size(285, 333);
-            pbCover.SizeMode = PictureBoxSizeMode.StretchImage;
-            pbCover.TabIndex = 17;
-            pbCover.TabStop = false;
-            // 
-            // rtbLyrics
-            // 
-            rtbLyrics.BackColor = Color.Chartreuse;
-            rtbLyrics.Font = new Font("Yu Gothic UI", 13.8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            rtbLyrics.Location = new Point(800, 460);
-            rtbLyrics.Margin = new Padding(3, 4, 3, 4);
-            rtbLyrics.Name = "rtbLyrics";
-            rtbLyrics.Size = new Size(285, 239);
-            rtbLyrics.TabIndex = 20;
-            rtbLyrics.Text = "";
-            // 
-            // lblCanciones
-            // 
+
+            // btnPrev
+            btnPrev.Location = new System.Drawing.Point(446, 14);
+            btnPrev.Size = new System.Drawing.Size(90, 46);
+            btnPrev.Text = "⏮  Prev";
+            btnPrev.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnPrev.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnPrev.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnPrev.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnPrev.ForeColor = System.Drawing.Color.White;
+            btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnPrev.CornerRadius = 8;
+            btnPrev.Name = "btnPrev";
+            btnPrev.TabIndex = 4;
+            btnPrev.Click += btnPrev_Click;
+
+            // btnNext
+            btnNext.Location = new System.Drawing.Point(549, 14);
+            btnNext.Size = new System.Drawing.Size(90, 46);
+            btnNext.Text = "Next ⏭";
+            btnNext.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnNext.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnNext.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnNext.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnNext.ForeColor = System.Drawing.Color.White;
+            btnNext.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnNext.CornerRadius = 8;
+            btnNext.Name = "btnNext";
+            btnNext.TabIndex = 5;
+            btnNext.Click += btnNext_Click;
+
+            // ── lblCanciones ──────────────────────────────────────────────────
             lblCanciones.AutoSize = true;
-            lblCanciones.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCanciones.Location = new Point(14, 76);
+            lblCanciones.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblCanciones.ForeColor = System.Drawing.Color.White;
+            lblCanciones.BackColor = System.Drawing.Color.Transparent;
+            lblCanciones.Location = new System.Drawing.Point(14, 76);
             lblCanciones.Name = "lblCanciones";
-            lblCanciones.Size = new Size(179, 25);
-            lblCanciones.TabIndex = 7;
+            lblCanciones.TabIndex = 6;
             lblCanciones.Text = "Lista de Canciones:";
-            // 
-            // lblCover
-            // 
-            lblCover.AutoSize = true;
-            lblCover.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblCover.Location = new Point(800, 44);
-            lblCover.Name = "lblCover";
-            lblCover.Size = new Size(88, 25);
-            lblCover.TabIndex = 18;
-            lblCover.Text = "Portada:";
-            // 
-            // lblLyrics
-            // 
-            lblLyrics.AutoSize = true;
-            lblLyrics.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblLyrics.Location = new Point(800, 431);
-            lblLyrics.Name = "lblLyrics";
-            lblLyrics.Size = new Size(62, 25);
-            lblLyrics.TabIndex = 19;
-            lblLyrics.Text = "Letra:";
-            // 
-            // tbProgreso
-            // 
-            tbProgreso.Location = new Point(14, 480);
-            tbProgreso.Margin = new Padding(3, 4, 3, 4);
+
+            // ── tbProgreso ────────────────────────────────────────────────────
+            tbProgreso.Location = new System.Drawing.Point(14, 480);
             tbProgreso.Name = "tbProgreso";
-            tbProgreso.Size = new Size(766, 56);
-            tbProgreso.TabIndex = 8;
+            tbProgreso.Size = new System.Drawing.Size(766, 22);
+            tbProgreso.Minimum = 0;
+            tbProgreso.Maximum = 100;
+            tbProgreso.Value = 0;
+            tbProgreso.TrackColor = System.Drawing.Color.FromArgb(65, 65, 65);
+            tbProgreso.FillColor = System.Drawing.Color.LimeGreen;
+            tbProgreso.ThumbColor = System.Drawing.Color.White;
+            tbProgreso.ThumbHoverColor = System.Drawing.Color.LimeGreen;
+            tbProgreso.TabIndex = 7;
             tbProgreso.MouseDown += tbProgreso_MouseDown;
             tbProgreso.MouseUp += tbProgreso_MouseUp;
-            // 
-            // tbVolumen
-            // 
-            tbVolumen.Location = new Point(103, 573);
-            tbVolumen.Margin = new Padding(3, 4, 3, 4);
-            tbVolumen.Maximum = 100;
-            tbVolumen.Name = "tbVolumen";
-            tbVolumen.Size = new Size(286, 56);
-            tbVolumen.TabIndex = 12;
-            tbVolumen.Value = 50;
-            tbVolumen.Scroll += tbVolumen_Scroll;
-            // 
-            // lblTiempoActual
-            // 
+
+            // ── lblTiempoActual ───────────────────────────────────────────────
             lblTiempoActual.AutoSize = true;
-            lblTiempoActual.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTiempoActual.Location = new Point(14, 540);
+            lblTiempoActual.Font = new System.Drawing.Font("Segoe UI", 9F);
+            lblTiempoActual.ForeColor = System.Drawing.Color.LimeGreen;
+            lblTiempoActual.BackColor = System.Drawing.Color.Transparent;
+            lblTiempoActual.Location = new System.Drawing.Point(14, 507);
             lblTiempoActual.Name = "lblTiempoActual";
-            lblTiempoActual.Size = new Size(55, 23);
-            lblTiempoActual.TabIndex = 9;
+            lblTiempoActual.TabIndex = 8;
             lblTiempoActual.Text = "00:00";
-            // 
-            // lblTiempoTotal
-            // 
+
+            // ── lblTiempoTotal ────────────────────────────────────────────────
             lblTiempoTotal.AutoSize = true;
-            lblTiempoTotal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTiempoTotal.Location = new Point(729, 540);
+            lblTiempoTotal.Font = new System.Drawing.Font("Segoe UI", 9F);
+            lblTiempoTotal.ForeColor = System.Drawing.Color.FromArgb(150, 150, 150);
+            lblTiempoTotal.BackColor = System.Drawing.Color.Transparent;
+            lblTiempoTotal.Location = new System.Drawing.Point(735, 507);
             lblTiempoTotal.Name = "lblTiempoTotal";
-            lblTiempoTotal.Size = new Size(55, 23);
-            lblTiempoTotal.TabIndex = 10;
+            lblTiempoTotal.TabIndex = 9;
             lblTiempoTotal.Text = "00:00";
-            // 
-            // lblVolumen
-            // 
+
+            // ── lblVolumen ────────────────────────────────────────────────────
             lblVolumen.AutoSize = true;
-            lblVolumen.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblVolumen.Location = new Point(14, 580);
+            lblVolumen.Font = new System.Drawing.Font("Segoe UI", 9F);
+            lblVolumen.ForeColor = System.Drawing.Color.FromArgb(150, 150, 150);
+            lblVolumen.BackColor = System.Drawing.Color.Transparent;
+            lblVolumen.Location = new System.Drawing.Point(14, 540);
             lblVolumen.Name = "lblVolumen";
-            lblVolumen.Size = new Size(85, 23);
-            lblVolumen.TabIndex = 11;
-            lblVolumen.Text = "Volumen:";
-            // 
-            // btnNext
-            // 
-            btnNext.BackColor = Color.LightGray;
-            btnNext.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnNext.Location = new Point(663, 16);
-            btnNext.Margin = new Padding(3, 4, 3, 4);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(103, 53);
-            btnNext.TabIndex = 6;
-            btnNext.Text = "Next ⏭";
-            btnNext.UseVisualStyleBackColor = false;
-            btnNext.Click += btnNext_Click;
-            // 
-            // btnPrev
-            // 
-            btnPrev.BackColor = Color.LightGray;
-            btnPrev.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnPrev.Location = new Point(549, 16);
-            btnPrev.Margin = new Padding(3, 4, 3, 4);
-            btnPrev.Name = "btnPrev";
-            btnPrev.Size = new Size(103, 53);
-            btnPrev.TabIndex = 5;
-            btnPrev.Text = "Prev ⏮";
-            btnPrev.UseVisualStyleBackColor = false;
-            btnPrev.Click += btnPrev_Click;
-            // 
-            // btnAleatorio
-            // 
-            btnAleatorio.BackColor = Color.LightGray;
-            btnAleatorio.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAleatorio.Location = new Point(434, 573);
-            btnAleatorio.Margin = new Padding(3, 4, 3, 4);
+            lblVolumen.TabIndex = 10;
+            lblVolumen.Text = "🔊  Volumen";
+
+            // ── tbVolumen ─────────────────────────────────────────────────────
+            tbVolumen.Location = new System.Drawing.Point(110, 538);
+            tbVolumen.Name = "tbVolumen";
+            tbVolumen.Size = new System.Drawing.Size(300, 22);
+            tbVolumen.Minimum = 0;
+            tbVolumen.Maximum = 100;
+            tbVolumen.Value = 50;
+            tbVolumen.TrackColor = System.Drawing.Color.FromArgb(65, 65, 65);
+            tbVolumen.FillColor = System.Drawing.Color.LimeGreen;
+            tbVolumen.ThumbColor = System.Drawing.Color.White;
+            tbVolumen.ThumbHoverColor = System.Drawing.Color.LimeGreen;
+            tbVolumen.TabIndex = 11;
+            tbVolumen.ValueChanged += tbVolumen_ValueChanged;
+
+            // ── FILA 3: Aleatorio + Repetir (Y=530) ──────────────────────────
+
+            // btnAleatorio — apagado: gris, encendido: verde (se cambia en código)
+            btnAleatorio.Location = new System.Drawing.Point(432, 528);
+            btnAleatorio.Size = new System.Drawing.Size(128, 36);
+            btnAleatorio.Text = "🔀  Aleatorio";
+            btnAleatorio.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnAleatorio.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnAleatorio.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnAleatorio.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnAleatorio.ForeColor = System.Drawing.Color.FromArgb(155, 155, 155);
+            btnAleatorio.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnAleatorio.CornerRadius = 18;  // completamente redondeado (pill)
             btnAleatorio.Name = "btnAleatorio";
-            btnAleatorio.Size = new Size(137, 53);
-            btnAleatorio.TabIndex = 21;
-            btnAleatorio.Text = "🔀 Aleatorio";
-            btnAleatorio.UseVisualStyleBackColor = false;
+            btnAleatorio.TabIndex = 20;
             btnAleatorio.Click += btnAleatorio_Click;
-            // 
+
             // btnRepetir
-            // 
-            btnRepetir.BackColor = Color.LightGray;
-            btnRepetir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnRepetir.Location = new Point(585, 573);
-            btnRepetir.Margin = new Padding(3, 4, 3, 4);
+            btnRepetir.Location = new System.Drawing.Point(572, 528);
+            btnRepetir.Size = new System.Drawing.Size(128, 36);
+            btnRepetir.Text = "🔁  Repetir";
+            btnRepetir.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnRepetir.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnRepetir.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnRepetir.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnRepetir.ForeColor = System.Drawing.Color.FromArgb(155, 155, 155);
+            btnRepetir.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnRepetir.CornerRadius = 18;
             btnRepetir.Name = "btnRepetir";
-            btnRepetir.Size = new Size(137, 53);
-            btnRepetir.TabIndex = 22;
-            btnRepetir.Text = "🔁 Repetir";
-            btnRepetir.UseVisualStyleBackColor = false;
+            btnRepetir.TabIndex = 21;
             btnRepetir.Click += btnRepetir_Click;
-            // 
-            // btnEliminarCancion
-            // 
-            btnEliminarCancion.BackColor = Color.LightCoral;
-            btnEliminarCancion.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            btnEliminarCancion.Location = new Point(800, 16);
-            btnEliminarCancion.Margin = new Padding(3, 4, 3, 4);
+
+            // ── FILA 4: Playlist + WMP + Letra (Y=576) ───────────────────────
+
+            btnGuardarPlaylist.Location = new System.Drawing.Point(14, 576);
+            btnGuardarPlaylist.Size = new System.Drawing.Size(155, 42);
+            btnGuardarPlaylist.Text = "💾  Guardar Playlist";
+            btnGuardarPlaylist.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnGuardarPlaylist.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnGuardarPlaylist.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnGuardarPlaylist.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnGuardarPlaylist.ForeColor = System.Drawing.Color.White;
+            btnGuardarPlaylist.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnGuardarPlaylist.CornerRadius = 8;
+            btnGuardarPlaylist.Name = "btnGuardarPlaylist";
+            btnGuardarPlaylist.TabIndex = 12;
+            btnGuardarPlaylist.Click += btnGuardarPlaylist_Click;
+
+            btnCargarPlaylist.Location = new System.Drawing.Point(182, 576);
+            btnCargarPlaylist.Size = new System.Drawing.Size(155, 42);
+            btnCargarPlaylist.Text = "📂  Cargar Playlist";
+            btnCargarPlaylist.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnCargarPlaylist.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnCargarPlaylist.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnCargarPlaylist.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnCargarPlaylist.ForeColor = System.Drawing.Color.White;
+            btnCargarPlaylist.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnCargarPlaylist.CornerRadius = 8;
+            btnCargarPlaylist.Name = "btnCargarPlaylist";
+            btnCargarPlaylist.TabIndex = 13;
+            btnCargarPlaylist.Click += btnCargarPlaylist_Click;
+
+            btnAbrirWMP.Location = new System.Drawing.Point(350, 576);
+            btnAbrirWMP.Size = new System.Drawing.Size(155, 42);
+            btnAbrirWMP.Text = "🎵  Abrir en WMP";
+            btnAbrirWMP.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnAbrirWMP.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnAbrirWMP.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnAbrirWMP.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnAbrirWMP.ForeColor = System.Drawing.Color.White;
+            btnAbrirWMP.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnAbrirWMP.CornerRadius = 8;
+            btnAbrirWMP.Name = "btnAbrirWMP";
+            btnAbrirWMP.TabIndex = 14;
+            btnAbrirWMP.Click += btnAbrirWMP_Click;
+
+            btnLetra.Location = new System.Drawing.Point(518, 576);
+            btnLetra.Size = new System.Drawing.Size(155, 42);
+            btnLetra.Text = "🎤  Buscar Letra";
+            btnLetra.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            btnLetra.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
+            btnLetra.PressColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            btnLetra.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
+            btnLetra.ForeColor = System.Drawing.Color.White;
+            btnLetra.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnLetra.CornerRadius = 8;
+            btnLetra.Name = "btnLetra";
+            btnLetra.TabIndex = 15;
+            btnLetra.Click += btnLetra_Click;
+
+            // ── Panel derecho — Eliminar / Editar Tags ────────────────────────
+
+            btnEliminarCancion.Location = new System.Drawing.Point(800, 14);
+            btnEliminarCancion.Size = new System.Drawing.Size(128, 46);
+            btnEliminarCancion.Text = "❌  Eliminar";
+            btnEliminarCancion.NormalColor = System.Drawing.Color.FromArgb(110, 25, 25);
+            btnEliminarCancion.HoverColor = System.Drawing.Color.FromArgb(160, 35, 35);
+            btnEliminarCancion.PressColor = System.Drawing.Color.FromArgb(75, 15, 15);
+            btnEliminarCancion.BorderColor = System.Drawing.Color.FromArgb(140, 35, 35);
+            btnEliminarCancion.ForeColor = System.Drawing.Color.White;
+            btnEliminarCancion.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnEliminarCancion.CornerRadius = 8;
             btnEliminarCancion.Name = "btnEliminarCancion";
-            btnEliminarCancion.Size = new Size(134, 53);
-            btnEliminarCancion.TabIndex = 23;
-            btnEliminarCancion.Text = "❌ Eliminar";
-            btnEliminarCancion.UseVisualStyleBackColor = false;
+            btnEliminarCancion.TabIndex = 22;
             btnEliminarCancion.Click += btnEliminarCancion_Click;
-            // 
-            // btnEditarTags
-            // 
-            btnEditarTags.BackColor = Color.LightBlue;
-            btnEditarTags.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            btnEditarTags.Location = new Point(951, 16);
-            btnEditarTags.Margin = new Padding(3, 4, 3, 4);
+
+            btnEditarTags.Location = new System.Drawing.Point(942, 14);
+            btnEditarTags.Size = new System.Drawing.Size(128, 46);
+            btnEditarTags.Text = "✏️  Editar Tags";
+            btnEditarTags.NormalColor = System.Drawing.Color.FromArgb(22, 72, 130);
+            btnEditarTags.HoverColor = System.Drawing.Color.FromArgb(32, 100, 175);
+            btnEditarTags.PressColor = System.Drawing.Color.FromArgb(14, 50, 95);
+            btnEditarTags.BorderColor = System.Drawing.Color.FromArgb(38, 90, 155);
+            btnEditarTags.ForeColor = System.Drawing.Color.White;
+            btnEditarTags.Font = new System.Drawing.Font("Segoe UI", 9F);
+            btnEditarTags.CornerRadius = 8;
             btnEditarTags.Name = "btnEditarTags";
-            btnEditarTags.Size = new Size(134, 53);
-            btnEditarTags.TabIndex = 24;
-            btnEditarTags.Text = "✏️ Editar Tags";
-            btnEditarTags.UseVisualStyleBackColor = false;
+            btnEditarTags.TabIndex = 23;
             btnEditarTags.Click += btnEditarTags_Click;
-            // 
-            // timer1
-            // 
+
+            // ── pbCover ───────────────────────────────────────────────────────
+            pbCover.Anchor = System.Windows.Forms.AnchorStyles.Top
+                                | System.Windows.Forms.AnchorStyles.Bottom
+                                | System.Windows.Forms.AnchorStyles.Left
+                                | System.Windows.Forms.AnchorStyles.Right;
+            pbCover.BackColor = System.Drawing.Color.FromArgb(28, 28, 28);
+            pbCover.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            pbCover.Location = new System.Drawing.Point(800, 75);
+            pbCover.Name = "pbCover";
+            pbCover.Size = new System.Drawing.Size(270, 330);
+            pbCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            pbCover.TabStop = false;
+
+            // ── lblCover ──────────────────────────────────────────────────────
+            lblCover.AutoSize = true;
+            lblCover.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblCover.ForeColor = System.Drawing.Color.White;
+            lblCover.BackColor = System.Drawing.Color.Transparent;
+            lblCover.Location = new System.Drawing.Point(800, 48);
+            lblCover.Name = "lblCover";
+            lblCover.Text = "Portada:";
+
+            // ── lblLyrics ─────────────────────────────────────────────────────
+            lblLyrics.AutoSize = true;
+            lblLyrics.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblLyrics.ForeColor = System.Drawing.Color.White;
+            lblLyrics.BackColor = System.Drawing.Color.Transparent;
+            lblLyrics.Location = new System.Drawing.Point(800, 420);
+            lblLyrics.Name = "lblLyrics";
+            lblLyrics.Text = "Letra:";
+
+            // ── rtbLyrics ─────────────────────────────────────────────────────
+            rtbLyrics.BackColor = System.Drawing.Color.FromArgb(22, 22, 22);
+            rtbLyrics.ForeColor = System.Drawing.Color.White;
+            rtbLyrics.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            rtbLyrics.Font = new System.Drawing.Font("Segoe UI", 10F);
+            rtbLyrics.Location = new System.Drawing.Point(800, 448);
+            rtbLyrics.Name = "rtbLyrics";
+            rtbLyrics.Size = new System.Drawing.Size(270, 170);
+            rtbLyrics.Text = "";
+
+            // ── timer1 ────────────────────────────────────────────────────────
             timer1.Tick += timer1_Tick;
-            // 
-            // Form1
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+
+            // ── Form1 ─────────────────────────────────────────────────────────
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             AutoSize = true;
-            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1109, 727);
+            BackgroundImage = (System.Drawing.Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            ClientSize = new System.Drawing.Size(1090, 636);
+
             Controls.Add(btnEditarTags);
             Controls.Add(btnEliminarCancion);
             Controls.Add(btnRepetir);
@@ -423,22 +441,19 @@
             Controls.Add(btnNext);
             Controls.Add(btnPrev);
             Controls.Add(btnStop);
-            Controls.Add(btnPause);
-            Controls.Add(btnPlay);
+            Controls.Add(btnPlayPause);
             Controls.Add(btnAbrirCarpeta);
             Controls.Add(dgvCanciones);
+
             DoubleBuffered = true;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(3, 4, 3, 4);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Stopify Music Player";
+
             ((System.ComponentModel.ISupportInitialize)dgvCanciones).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbCover).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tbProgreso).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tbVolumen).EndInit();
             ResumeLayout(false);
             PerformLayout();
-
         }
 
         #endregion
