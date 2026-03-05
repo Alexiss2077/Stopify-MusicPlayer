@@ -31,25 +31,32 @@ namespace Stopify
         private ArrayManager _shuffleManager;
         private int _shufflePosition = 0;
 
-        // REPETIR:  0=apagado  1=lista  2=canción
+        // REPETIR:  0=off  1=lista  2=canción
         private int modoRepetir = 0;
 
         // COVERS
         private CoverSearcher _coverSearcher;
 
-        // ── Colores de estado para CustomButton ───────────────────────────────
-        // PlayPause
+        // SCROLLBAR personalizado para el grid
+        private CustomScrollBar _gridScroll;
+
+        // SCROLLBAR personalizado para la letra
+        private CustomScrollBar _lyricsScroll;
+        private bool _sincronizandoLetra = false; // guard anti-reentrada
+
+        // PANTALLA COMPLETA
+        private bool _fullscreen = false;
+        private FormWindowState _prevState;
+
+        // ── Colores de estado ─────────────────────────────────────────────────
         private static readonly Color _playNormal = Color.FromArgb(30, 160, 30);
         private static readonly Color _playHover = Color.FromArgb(40, 200, 40);
         private static readonly Color _pauseNormal = Color.FromArgb(180, 130, 0);
         private static readonly Color _pauseHover = Color.FromArgb(210, 160, 0);
-        // Toggle activo (aleatorio / repetir lista)
         private static readonly Color _activeNormal = Color.FromArgb(20, 130, 20);
         private static readonly Color _activeHover = Color.FromArgb(28, 170, 28);
-        // Toggle repetir canción
         private static readonly Color _repeatNormal = Color.FromArgb(140, 80, 0);
         private static readonly Color _repeatHover = Color.FromArgb(185, 110, 0);
-        // Inactivo (botones toggle apagados)
         private static readonly Color _offNormal = Color.FromArgb(38, 38, 38);
         private static readonly Color _offHover = Color.FromArgb(58, 58, 58);
         private static readonly Color _offFore = Color.FromArgb(155, 155, 155);
@@ -58,6 +65,8 @@ namespace Stopify
         {
             InitializeComponent();
             ConfigurarGrid();
+            ConfigurarScrollBarPersonalizado();
+            ConfigurarScrollBarLetra();
 
             _coverSearcher = new CoverSearcher();
 
@@ -67,6 +76,178 @@ namespace Stopify
             tbVolumen.Value = 50;
 
             ConfigurarDragDrop();
+
+            // F11 → pantalla completa
+            KeyPreview = true;
+            KeyDown += Form1_KeyDown;
+
+            // Redibujar scrollbars cuando cambia el tamaño
+            Resize += (s, e) => { ActualizarScrollBar(); ActualizarScrollBarLetra(); };
+        }
+
+        // ── PANTALLA COMPLETA ─────────────────────────────────────────────────
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F11)
+                ToggleFullscreen();
+        }
+
+        private void ToggleFullscreen()
+        {
+            _fullscreen = !_fullscreen;
+            if (_fullscreen)
+            {
+                _prevState = WindowState;
+                FormBorderStyle = FormBorderStyle.None;
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                FormBorderStyle = FormBorderStyle.Sizable;
+                WindowState = _prevState;
+            }
+        }
+
+        // ── SCROLLBAR PERSONALIZADO ───────────────────────────────────────────
+
+        private void ConfigurarScrollBarPersonalizado()
+        {
+            // Ocultar el scrollbar nativo del DataGridView
+            dgvCanciones.ScrollBars = ScrollBars.None;
+
+            _gridScroll = new CustomScrollBar
+            {
+                Width = 8,
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right,
+                TrackColor = Color.FromArgb(28, 28, 28),
+                ThumbColor = Color.FromArgb(72, 72, 72),
+                ThumbHover = Color.FromArgb(110, 110, 110),
+                ThumbActive = Color.LimeGreen,
+            };
+
+            Controls.Add(_gridScroll);
+            _gridScroll.BringToFront();
+
+            _gridScroll.Scroll += (s, e) =>
+            {
+                if (dgvCanciones.Rows.Count > 0)
+                {
+                    int idx = Math.Min(_gridScroll.Value, dgvCanciones.Rows.Count - 1);
+                    dgvCanciones.FirstDisplayedScrollingRowIndex = idx;
+                }
+            };
+
+            dgvCanciones.Scroll += (s, e) => SincronizarScrollBar();
+            dgvCanciones.MouseWheel += (s, e) => SincronizarScrollBar();
+            dgvCanciones.RowsAdded += (s, e) => ActualizarScrollBar();
+            dgvCanciones.RowsRemoved += (s, e) => ActualizarScrollBar();
+
+            ActualizarScrollBar();
+        }
+
+        private void ActualizarScrollBar()
+        {
+            if (_gridScroll == null) return;
+            _gridScroll.Location = new Point(dgvCanciones.Right + 4, dgvCanciones.Top);
+            _gridScroll.Height = dgvCanciones.Height;
+
+            int total = dgvCanciones.Rows.Count;
+            int visible = dgvCanciones.DisplayedRowCount(false);
+
+            if (total > visible)
+            {
+                _gridScroll.Minimum = 0;
+                _gridScroll.Maximum = total;
+                _gridScroll.LargeChange = Math.Max(1, visible);
+                _gridScroll.Visible = true;
+            }
+            else _gridScroll.Visible = false;
+        }
+
+        private void SincronizarScrollBar()
+        {
+            if (_gridScroll == null || !_gridScroll.Visible) return;
+            if (dgvCanciones.Rows.Count == 0) return;
+            _gridScroll.Value = dgvCanciones.FirstDisplayedScrollingRowIndex;
+        }
+
+        // ── SCROLLBAR PERSONALIZADO LETRA ─────────────────────────────────────
+
+        private void ConfigurarScrollBarLetra()
+        {
+            _lyricsScroll = new CustomScrollBar
+            {
+                Width = 6,
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right,
+                TrackColor = Color.FromArgb(22, 22, 22),
+                ThumbColor = Color.FromArgb(70, 70, 70),
+                ThumbHover = Color.FromArgb(105, 105, 105),
+                ThumbActive = Color.LimeGreen,
+            };
+
+            Controls.Add(_lyricsScroll);
+            _lyricsScroll.BringToFront();
+
+            // Scroll custom → mover el RichTextBox (con guard)
+            _lyricsScroll.Scroll += (s, e) =>
+            {
+                if (_sincronizandoLetra) return;
+                _sincronizandoLetra = true;
+                try
+                {
+                    int totalLines = rtbLyrics.Lines.Length;
+                    int targetLine = Math.Min(_lyricsScroll.Value, Math.Max(0, totalLines - 1));
+                    int charIndex = rtbLyrics.GetFirstCharIndexFromLine(targetLine);
+                    if (charIndex >= 0)
+                    {
+                        rtbLyrics.SelectionStart = charIndex;
+                        rtbLyrics.ScrollToCaret();
+                    }
+                }
+                finally { _sincronizandoLetra = false; }
+            };
+
+            // RichTextBox → actualizar scrollbar (con guard)
+            rtbLyrics.VScroll += (s, e) => SincronizarScrollBarLetra();
+            rtbLyrics.MouseWheel += (s, e) => { this.BeginInvoke((Action)SincronizarScrollBarLetra); };
+            rtbLyrics.TextChanged += (s, e) => ActualizarScrollBarLetra();
+
+            ActualizarScrollBarLetra();
+        }
+
+        private void ActualizarScrollBarLetra()
+        {
+            if (_lyricsScroll == null) return;
+
+            _lyricsScroll.Location = new Point(rtbLyrics.Right + 2, rtbLyrics.Top);
+            _lyricsScroll.Height = rtbLyrics.Height;
+
+            int totalLines = rtbLyrics.Lines.Length;
+            int visibleLines = Math.Max(1, rtbLyrics.Height / Math.Max(1, rtbLyrics.Font.Height + 2));
+
+            if (totalLines > visibleLines)
+            {
+                _lyricsScroll.Minimum = 0;
+                _lyricsScroll.Maximum = totalLines;
+                _lyricsScroll.LargeChange = visibleLines;
+                _lyricsScroll.Visible = true;
+            }
+            else _lyricsScroll.Visible = false;
+        }
+
+        private void SincronizarScrollBarLetra()
+        {
+            if (_lyricsScroll == null || !_lyricsScroll.Visible) return;
+            if (_sincronizandoLetra) return;
+            _sincronizandoLetra = true;
+            try
+            {
+                int firstChar = rtbLyrics.GetCharIndexFromPosition(new Point(1, 1));
+                int firstLine = rtbLyrics.GetLineFromCharIndex(firstChar);
+                _lyricsScroll.Value = firstLine;
+            }
+            finally { _sincronizandoLetra = false; }
         }
 
         // ── DRAG & DROP ────────────────────────────────────────────────────────
@@ -79,6 +260,8 @@ namespace Stopify
             dgvCanciones.DragOver += dgvCanciones_DragOver;
             dgvCanciones.DragDrop += dgvCanciones_DragDrop;
             dgvCanciones.Paint += dgvCanciones_Paint;
+            dgvCanciones.RowsAdded += (s, e) => ActualizarScrollBar();
+            dgvCanciones.RowsRemoved += (s, e) => ActualizarScrollBar();
         }
 
         private void dgvCanciones_MouseDown(object sender, MouseEventArgs e)
@@ -86,8 +269,8 @@ namespace Stopify
             rowIndexFromMouseDown = dgvCanciones.HitTest(e.X, e.Y).RowIndex;
             if (rowIndexFromMouseDown != -1)
             {
-                Size s = SystemInformation.DragSize;
-                dragBoxFromMouseDown = new Rectangle(new Point(e.X - s.Width / 2, e.Y - s.Height / 2), s);
+                Size sz = SystemInformation.DragSize;
+                dragBoxFromMouseDown = new Rectangle(new Point(e.X - sz.Width / 2, e.Y - sz.Height / 2), sz);
             }
             else dragBoxFromMouseDown = Rectangle.Empty;
         }
@@ -229,6 +412,7 @@ namespace Stopify
             foreach (var r in Directory.GetFiles(carpeta, "*.mp3"))
                 AgregarCancionAlGrid(r);
             if (dgvCanciones.Rows.Count > 0) { dgvCanciones.Rows[0].Selected = true; indiceActual = 0; }
+            ActualizarScrollBar();
         }
 
         private void btnGuardarPlaylist_Click(object sender, EventArgs e)
@@ -256,6 +440,7 @@ namespace Stopify
             foreach (string r in IOFile.ReadAllLines(archivo))
                 if (IOFile.Exists(r)) AgregarCancionAlGrid(r);
             if (dgvCanciones.Rows.Count > 0) { indiceActual = 0; dgvCanciones.Rows[0].Selected = true; }
+            ActualizarScrollBar();
             MessageBox.Show("Playlist cargada.");
         }
 
@@ -288,8 +473,7 @@ namespace Stopify
             lblTiempoActual.Text = "00:00";
             lblTiempoTotal.Text = audioFile.TotalTime.ToString(@"mm\:ss");
 
-            // Botón → ⏸ Pause (dorado)
-            SetPlayPauseState(playing: true);
+            SetPlayPauseState(true);
         }
 
         private void DetenerCancion()
@@ -298,10 +482,10 @@ namespace Stopify
             audioFile?.Dispose(); audioFile = null;
             tbProgreso.Value = 0;
             lblTiempoActual.Text = "00:00";
-            SetPlayPauseState(playing: false);
+            SetPlayPauseState(false);
         }
 
-        // ── Helpers de estado visual ──────────────────────────────────────────
+        // ── Estado visual de botones ──────────────────────────────────────────
 
         private void SetPlayPauseState(bool playing)
         {
@@ -310,15 +494,14 @@ namespace Stopify
                 btnPlayPause.Text = "⏸   Pause";
                 btnPlayPause.NormalColor = _pauseNormal;
                 btnPlayPause.HoverColor = _pauseHover;
-                btnPlayPause.ForeColor = Color.White;
             }
             else
             {
                 btnPlayPause.Text = "▶   Play";
                 btnPlayPause.NormalColor = _playNormal;
                 btnPlayPause.HoverColor = _playHover;
-                btnPlayPause.ForeColor = Color.White;
             }
+            btnPlayPause.ForeColor = Color.White;
             btnPlayPause.Invalidate();
         }
 
@@ -336,23 +519,14 @@ namespace Stopify
             switch (estado)
             {
                 case 0:
-                    btnRepetir.NormalColor = _offNormal;
-                    btnRepetir.HoverColor = _offHover;
-                    btnRepetir.ForeColor = _offFore;
-                    btnRepetir.Text = "🔁  Repetir";
-                    break;
+                    btnRepetir.NormalColor = _offNormal; btnRepetir.HoverColor = _offHover;
+                    btnRepetir.ForeColor = _offFore; btnRepetir.Text = "🔁  Repetir"; break;
                 case 1:
-                    btnRepetir.NormalColor = _activeNormal;
-                    btnRepetir.HoverColor = _activeHover;
-                    btnRepetir.ForeColor = Color.White;
-                    btnRepetir.Text = "🔁  Lista";
-                    break;
+                    btnRepetir.NormalColor = _activeNormal; btnRepetir.HoverColor = _activeHover;
+                    btnRepetir.ForeColor = Color.White; btnRepetir.Text = "🔁  Lista"; break;
                 case 2:
-                    btnRepetir.NormalColor = _repeatNormal;
-                    btnRepetir.HoverColor = _repeatHover;
-                    btnRepetir.ForeColor = Color.White;
-                    btnRepetir.Text = "🔂  Canción";
-                    break;
+                    btnRepetir.NormalColor = _repeatNormal; btnRepetir.HoverColor = _repeatHover;
+                    btnRepetir.ForeColor = Color.White; btnRepetir.Text = "🔂  Canción"; break;
             }
             btnRepetir.Invalidate();
         }
@@ -370,31 +544,22 @@ namespace Stopify
                 if (_shuffleManager == null || _shuffleManager.Vector.Length != dgvCanciones.Rows.Count)
                 {
                     _shuffleManager = new ArrayManager(dgvCanciones.Rows.Count);
-                    _shuffleManager.FillArray();
-                    _shuffleManager.ShuffleArray();
-                    _shufflePosition = 0;
+                    _shuffleManager.FillArray(); _shuffleManager.ShuffleArray(); _shufflePosition = 0;
                 }
-
                 if (_shufflePosition >= _shuffleManager.Vector.Length)
                 {
                     if (modoRepetir == 0) { DetenerCancion(); return; }
-                    _shuffleManager.ShuffleArray();
-                    _shufflePosition = 0;
+                    _shuffleManager.ShuffleArray(); _shufflePosition = 0;
                 }
-
                 indiceActual = _shuffleManager.Vector[_shufflePosition] - 1;
                 _shufflePosition++;
             }
             else
             {
-                int siguiente = indiceActual + direccion;
-                if (siguiente >= dgvCanciones.Rows.Count)
-                {
-                    if (modoRepetir == 0) { DetenerCancion(); return; }
-                    indiceActual = 0;
-                }
-                else if (siguiente < 0) indiceActual = dgvCanciones.Rows.Count - 1;
-                else indiceActual = siguiente;
+                int sig = indiceActual + direccion;
+                if (sig >= dgvCanciones.Rows.Count) { if (modoRepetir == 0) { DetenerCancion(); return; } indiceActual = 0; }
+                else if (sig < 0) indiceActual = dgvCanciones.Rows.Count - 1;
+                else indiceActual = sig;
             }
 
             dgvCanciones.Rows[indiceActual].Selected = true;
@@ -407,44 +572,23 @@ namespace Stopify
         private async void btnPlayPause_Click(object sender, EventArgs e)
         {
             if (!ValidarCancionesCargadas()) return;
-
             if (outputDevice == null || audioFile == null)
             {
-                indiceActual = dgvCanciones.SelectedRows.Count > 0
-                    ? dgvCanciones.SelectedRows[0].Index : 0;
+                indiceActual = dgvCanciones.SelectedRows.Count > 0 ? dgvCanciones.SelectedRows[0].Index : 0;
                 await ReproducirCancion(indiceActual);
                 return;
             }
-
             if (outputDevice.PlaybackState == PlaybackState.Playing)
-            {
-                outputDevice.Pause();
-                SetPlayPauseState(playing: false);
-            }
+            { outputDevice.Pause(); SetPlayPauseState(false); }
             else
-            {
-                outputDevice.Play();
-                SetPlayPauseState(playing: true);
-            }
+            { outputDevice.Play(); SetPlayPauseState(true); }
         }
 
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            if (!ValidarCancionesCargadas()) return;
-            DetenerCancion();
-        }
+        private void btnStop_Click(object sender, EventArgs e) { if (!ValidarCancionesCargadas()) return; DetenerCancion(); }
 
-        private async void btnNext_Click(object sender, EventArgs e)
-        {
-            if (!ValidarCancionesCargadas()) return;
-            await CambiarCancion(1);
-        }
+        private async void btnNext_Click(object sender, EventArgs e) { if (!ValidarCancionesCargadas()) return; await CambiarCancion(1); }
 
-        private async void btnPrev_Click(object sender, EventArgs e)
-        {
-            if (!ValidarCancionesCargadas()) return;
-            await CambiarCancion(-1);
-        }
+        private async void btnPrev_Click(object sender, EventArgs e) { if (!ValidarCancionesCargadas()) return; await CambiarCancion(-1); }
 
         private void btnAleatorio_Click(object sender, EventArgs e)
         {
@@ -452,18 +596,12 @@ namespace Stopify
             if (modoAleatorio)
             {
                 _shuffleManager = new ArrayManager(dgvCanciones.Rows.Count);
-                _shuffleManager.FillArray();
-                _shuffleManager.ShuffleArray();
-                _shufflePosition = 0;
+                _shuffleManager.FillArray(); _shuffleManager.ShuffleArray(); _shufflePosition = 0;
             }
             SetAleatorioState(modoAleatorio);
         }
 
-        private void btnRepetir_Click(object sender, EventArgs e)
-        {
-            modoRepetir = (modoRepetir + 1) % 3;
-            SetRepetirState(modoRepetir);
-        }
+        private void btnRepetir_Click(object sender, EventArgs e) { modoRepetir = (modoRepetir + 1) % 3; SetRepetirState(modoRepetir); }
 
         private void btnEliminarCancion_Click(object sender, EventArgs e)
         {
@@ -474,7 +612,7 @@ namespace Stopify
             string titulo = dgvCanciones.Rows[idx].Cells["Titulo"].Value.ToString();
             string artista = dgvCanciones.Rows[idx].Cells["Artista"].Value.ToString();
 
-            if (MessageBox.Show($"¿Eliminar de la lista?\n\n{artista} - {titulo}\n\n(El archivo no se eliminará del disco)",
+            if (MessageBox.Show($"¿Eliminar de la lista?\n\n{artista} - {titulo}",
                 "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (indiceActual == idx) { DetenerCancion(); indiceActual = -1; }
@@ -482,6 +620,7 @@ namespace Stopify
                 if (indiceActual > idx) indiceActual--;
                 if (dgvCanciones.Rows.Count > 0)
                     dgvCanciones.Rows[Math.Min(idx, dgvCanciones.Rows.Count - 1)].Selected = true;
+                ActualizarScrollBar();
             }
         }
 
@@ -493,12 +632,9 @@ namespace Stopify
             int idx = dgvCanciones.SelectedRows[0].Index;
             string ruta = dgvCanciones.Rows[idx].Cells["Ruta"].Value.ToString();
 
-            bool estabaReproduciendo = false;
-            if (audioFile != null && idx == indiceActual)
-            {
-                estabaReproduciendo = outputDevice?.PlaybackState == PlaybackState.Playing;
-                DetenerCancion();
-            }
+            bool estabaReproduciendo = audioFile != null && idx == indiceActual &&
+                                       outputDevice?.PlaybackState == PlaybackState.Playing;
+            if (audioFile != null && idx == indiceActual) DetenerCancion();
 
             try
             {
@@ -540,7 +676,6 @@ namespace Stopify
         {
             try
             {
-                pbCover.Text = "Buscando portada..."; pbCover.Refresh();
                 var res = await _coverSearcher.BuscarMejorCover(artista, titulo);
                 if (res != null && res.Similitud > 0.5)
                 {
@@ -552,9 +687,8 @@ namespace Stopify
                         pbCover.Image = System.Drawing.Image.FromStream(ms);
                         await GuardarCoverEnMP3(ruta, img);
                     }
-                    catch { pbCover.Text = "Error descargando"; }
+                    catch { }
                 }
-                else pbCover.Text = "No encontrado";
             }
             catch { pbCover.Image = null; }
         }
@@ -582,8 +716,10 @@ namespace Stopify
         {
             if (dgvCanciones.SelectedRows.Count == 0) { MessageBox.Show("Selecciona una canción primero."); return; }
 
-            string artista = _coverSearcher.NormalizarTexto(ExtraerArtistaPrincipal(dgvCanciones.SelectedRows[0].Cells["Artista"].Value.ToString()));
-            string titulo = _coverSearcher.NormalizarTexto(dgvCanciones.SelectedRows[0].Cells["Titulo"].Value.ToString());
+            string artista = _coverSearcher.NormalizarTexto(ExtraerArtistaPrincipal(
+                dgvCanciones.SelectedRows[0].Cells["Artista"].Value.ToString()));
+            string titulo = _coverSearcher.NormalizarTexto(
+                dgvCanciones.SelectedRows[0].Cells["Titulo"].Value.ToString());
 
             if (string.IsNullOrWhiteSpace(artista) || string.IsNullOrWhiteSpace(titulo))
             { MessageBox.Show("No se puede buscar letra sin artista y título."); return; }
@@ -599,6 +735,7 @@ namespace Stopify
                 using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                 rtbLyrics.Text = doc.RootElement.TryGetProperty("plainLyrics", out var lyr) && !string.IsNullOrWhiteSpace(lyr.GetString())
                     ? lyr.GetString() : "No se encontró letra.";
+                ActualizarScrollBarLetra();
             }
             catch (Exception ex) { rtbLyrics.Text = $"Error: {ex.Message}"; }
             finally { btnLetra.Enabled = true; }
@@ -614,7 +751,7 @@ namespace Stopify
                 System.Diagnostics.Process.Start("wmplayer.exe",
                     $"\"{dgvCanciones.SelectedRows[0].Cells["Ruta"].Value}\"");
                 outputDevice?.Pause();
-                SetPlayPauseState(playing: false);
+                SetPlayPauseState(false);
             }
             catch (Exception ex) { MessageBox.Show("Error abriendo WMP: " + ex.Message); }
         }
@@ -643,9 +780,7 @@ namespace Stopify
         }
 
         private void tbVolumen_ValueChanged(object sender, EventArgs e)
-        {
-            if (outputDevice != null) outputDevice.Volume = tbVolumen.Value / 100f;
-        }
+        { if (outputDevice != null) outputDevice.Volume = tbVolumen.Value / 100f; }
 
         private void tbProgreso_MouseDown(object sender, MouseEventArgs e) => arrastrandoProgreso = true;
 

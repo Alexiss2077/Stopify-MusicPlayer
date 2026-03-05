@@ -6,7 +6,6 @@
 
         private System.Windows.Forms.DataGridView dgvCanciones;
 
-        // Todos los botones ahora son CustomButton
         private CustomButton btnAbrirCarpeta;
         private CustomButton btnPlayPause;
         private CustomButton btnStop;
@@ -22,9 +21,9 @@
         private CustomButton btnEditarTags;
 
         private System.Windows.Forms.PictureBox pbCover;
+        // lblCover eliminado
         private System.Windows.Forms.RichTextBox rtbLyrics;
         private System.Windows.Forms.Label lblCanciones;
-        private System.Windows.Forms.Label lblCover;
         private System.Windows.Forms.Label lblLyrics;
 
         private CustomTrackBar tbProgreso;
@@ -51,7 +50,6 @@
             System.ComponentModel.ComponentResourceManager resources =
                 new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 
-            // Instancias
             dgvCanciones = new System.Windows.Forms.DataGridView();
             btnAbrirCarpeta = new CustomButton();
             btnPlayPause = new CustomButton();
@@ -69,7 +67,6 @@
             pbCover = new System.Windows.Forms.PictureBox();
             rtbLyrics = new System.Windows.Forms.RichTextBox();
             lblCanciones = new System.Windows.Forms.Label();
-            lblCover = new System.Windows.Forms.Label();
             lblLyrics = new System.Windows.Forms.Label();
             tbProgreso = new CustomTrackBar();
             tbVolumen = new CustomTrackBar();
@@ -83,6 +80,7 @@
             SuspendLayout();
 
             // ── dgvCanciones ──────────────────────────────────────────────────
+            // Anchor: se estira en todas las direcciones con el form
             dgvCanciones.AllowUserToAddRows = false;
             dgvCanciones.AllowUserToDeleteRows = false;
             dgvCanciones.Anchor = System.Windows.Forms.AnchorStyles.Top
@@ -92,21 +90,23 @@
             dgvCanciones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             dgvCanciones.BackgroundColor = System.Drawing.Color.FromArgb(28, 28, 28);
             dgvCanciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanciones.Location = new System.Drawing.Point(14, 107);
+            dgvCanciones.Location = new System.Drawing.Point(14, 76);
             dgvCanciones.MultiSelect = false;
             dgvCanciones.Name = "dgvCanciones";
             dgvCanciones.ReadOnly = true;
             dgvCanciones.RowHeadersVisible = false;
             dgvCanciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dgvCanciones.Size = new System.Drawing.Size(766, 355);
+            dgvCanciones.Size = new System.Drawing.Size(756, 370);
             dgvCanciones.TabIndex = 0;
+            dgvCanciones.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             dgvCanciones.CellDoubleClick += dgvCanciones_CellDoubleClick;
 
-            // ── FILA 1: Controles de sesión (Y=14) ───────────────────────────
+            // ── FILA DE BOTONES PRINCIPALES (Y=14, altura 44) ─────────────────
+            // Todos con Anchor = Top | Left para que no se muevan al redimensionar
 
-            // btnAbrirCarpeta
             btnAbrirCarpeta.Location = new System.Drawing.Point(14, 14);
-            btnAbrirCarpeta.Size = new System.Drawing.Size(155, 46);
+            btnAbrirCarpeta.Size = new System.Drawing.Size(148, 44);
+            btnAbrirCarpeta.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             btnAbrirCarpeta.Text = "📂  Abrir Carpeta";
             btnAbrirCarpeta.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnAbrirCarpeta.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -119,9 +119,9 @@
             btnAbrirCarpeta.TabIndex = 1;
             btnAbrirCarpeta.Click += btnAbrirCarpeta_Click;
 
-            // btnPlayPause — acento verde, más grande
-            btnPlayPause.Location = new System.Drawing.Point(182, 14);
-            btnPlayPause.Size = new System.Drawing.Size(148, 46);
+            btnPlayPause.Location = new System.Drawing.Point(174, 14);
+            btnPlayPause.Size = new System.Drawing.Size(140, 44);
+            btnPlayPause.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             btnPlayPause.Text = "▶   Play";
             btnPlayPause.NormalColor = System.Drawing.Color.FromArgb(30, 160, 30);
             btnPlayPause.HoverColor = System.Drawing.Color.FromArgb(40, 200, 40);
@@ -134,9 +134,9 @@
             btnPlayPause.TabIndex = 2;
             btnPlayPause.Click += btnPlayPause_Click;
 
-            // btnStop
-            btnStop.Location = new System.Drawing.Point(343, 14);
-            btnStop.Size = new System.Drawing.Size(90, 46);
+            btnStop.Location = new System.Drawing.Point(326, 14);
+            btnStop.Size = new System.Drawing.Size(86, 44);
+            btnStop.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             btnStop.Text = "⏹  Stop";
             btnStop.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnStop.HoverColor = System.Drawing.Color.FromArgb(90, 28, 28);
@@ -149,9 +149,9 @@
             btnStop.TabIndex = 3;
             btnStop.Click += btnStop_Click;
 
-            // btnPrev
-            btnPrev.Location = new System.Drawing.Point(446, 14);
-            btnPrev.Size = new System.Drawing.Size(90, 46);
+            btnPrev.Location = new System.Drawing.Point(424, 14);
+            btnPrev.Size = new System.Drawing.Size(86, 44);
+            btnPrev.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             btnPrev.Text = "⏮  Prev";
             btnPrev.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnPrev.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -164,9 +164,9 @@
             btnPrev.TabIndex = 4;
             btnPrev.Click += btnPrev_Click;
 
-            // btnNext
-            btnNext.Location = new System.Drawing.Point(549, 14);
-            btnNext.Size = new System.Drawing.Size(90, 46);
+            btnNext.Location = new System.Drawing.Point(522, 14);
+            btnNext.Size = new System.Drawing.Size(86, 44);
+            btnNext.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             btnNext.Text = "Next ⏭";
             btnNext.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnNext.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -179,20 +179,16 @@
             btnNext.TabIndex = 5;
             btnNext.Click += btnNext_Click;
 
-            // ── lblCanciones ──────────────────────────────────────────────────
-            lblCanciones.AutoSize = true;
-            lblCanciones.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            lblCanciones.ForeColor = System.Drawing.Color.White;
-            lblCanciones.BackColor = System.Drawing.Color.Transparent;
-            lblCanciones.Location = new System.Drawing.Point(14, 76);
-            lblCanciones.Name = "lblCanciones";
-            lblCanciones.TabIndex = 6;
-            lblCanciones.Text = "Lista de Canciones:";
+            // ── lblCanciones (eliminado — más limpio sin él) ──────────────────
+            // El grid arranca directo debajo de los botones
 
-            // ── tbProgreso ────────────────────────────────────────────────────
-            tbProgreso.Location = new System.Drawing.Point(14, 480);
+            // ── tbProgreso — Anchor: Bottom | Left | Right ────────────────────
+            tbProgreso.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+                                       | System.Windows.Forms.AnchorStyles.Left
+                                       | System.Windows.Forms.AnchorStyles.Right;
+            tbProgreso.Location = new System.Drawing.Point(14, 460);
             tbProgreso.Name = "tbProgreso";
-            tbProgreso.Size = new System.Drawing.Size(766, 22);
+            tbProgreso.Size = new System.Drawing.Size(756, 22);
             tbProgreso.Minimum = 0;
             tbProgreso.Maximum = 100;
             tbProgreso.Value = 0;
@@ -204,38 +200,40 @@
             tbProgreso.MouseDown += tbProgreso_MouseDown;
             tbProgreso.MouseUp += tbProgreso_MouseUp;
 
-            // ── lblTiempoActual ───────────────────────────────────────────────
+            // ── Tiempos ───────────────────────────────────────────────────────
             lblTiempoActual.AutoSize = true;
+            lblTiempoActual.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblTiempoActual.Font = new System.Drawing.Font("Segoe UI", 9F);
             lblTiempoActual.ForeColor = System.Drawing.Color.LimeGreen;
             lblTiempoActual.BackColor = System.Drawing.Color.Transparent;
-            lblTiempoActual.Location = new System.Drawing.Point(14, 507);
+            lblTiempoActual.Location = new System.Drawing.Point(14, 487);
             lblTiempoActual.Name = "lblTiempoActual";
             lblTiempoActual.TabIndex = 8;
             lblTiempoActual.Text = "00:00";
 
-            // ── lblTiempoTotal ────────────────────────────────────────────────
             lblTiempoTotal.AutoSize = true;
+            lblTiempoTotal.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             lblTiempoTotal.Font = new System.Drawing.Font("Segoe UI", 9F);
             lblTiempoTotal.ForeColor = System.Drawing.Color.FromArgb(150, 150, 150);
             lblTiempoTotal.BackColor = System.Drawing.Color.Transparent;
-            lblTiempoTotal.Location = new System.Drawing.Point(735, 507);
+            lblTiempoTotal.Location = new System.Drawing.Point(720, 487);
             lblTiempoTotal.Name = "lblTiempoTotal";
             lblTiempoTotal.TabIndex = 9;
             lblTiempoTotal.Text = "00:00";
 
-            // ── lblVolumen ────────────────────────────────────────────────────
+            // ── Volumen ───────────────────────────────────────────────────────
             lblVolumen.AutoSize = true;
+            lblVolumen.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblVolumen.Font = new System.Drawing.Font("Segoe UI", 9F);
             lblVolumen.ForeColor = System.Drawing.Color.FromArgb(150, 150, 150);
             lblVolumen.BackColor = System.Drawing.Color.Transparent;
-            lblVolumen.Location = new System.Drawing.Point(14, 540);
+            lblVolumen.Location = new System.Drawing.Point(14, 520);
             lblVolumen.Name = "lblVolumen";
             lblVolumen.TabIndex = 10;
             lblVolumen.Text = "🔊  Volumen";
 
-            // ── tbVolumen ─────────────────────────────────────────────────────
-            tbVolumen.Location = new System.Drawing.Point(110, 538);
+            tbVolumen.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            tbVolumen.Location = new System.Drawing.Point(110, 518);
             tbVolumen.Name = "tbVolumen";
             tbVolumen.Size = new System.Drawing.Size(300, 22);
             tbVolumen.Minimum = 0;
@@ -248,10 +246,9 @@
             tbVolumen.TabIndex = 11;
             tbVolumen.ValueChanged += tbVolumen_ValueChanged;
 
-            // ── FILA 3: Aleatorio + Repetir (Y=530) ──────────────────────────
-
-            // btnAleatorio — apagado: gris, encendido: verde (se cambia en código)
-            btnAleatorio.Location = new System.Drawing.Point(432, 528);
+            // ── Aleatorio / Repetir ───────────────────────────────────────────
+            btnAleatorio.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnAleatorio.Location = new System.Drawing.Point(432, 510);
             btnAleatorio.Size = new System.Drawing.Size(128, 36);
             btnAleatorio.Text = "🔀  Aleatorio";
             btnAleatorio.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
@@ -260,13 +257,13 @@
             btnAleatorio.BorderColor = System.Drawing.Color.FromArgb(72, 72, 72);
             btnAleatorio.ForeColor = System.Drawing.Color.FromArgb(155, 155, 155);
             btnAleatorio.Font = new System.Drawing.Font("Segoe UI", 9F);
-            btnAleatorio.CornerRadius = 18;  // completamente redondeado (pill)
+            btnAleatorio.CornerRadius = 18;
             btnAleatorio.Name = "btnAleatorio";
             btnAleatorio.TabIndex = 20;
             btnAleatorio.Click += btnAleatorio_Click;
 
-            // btnRepetir
-            btnRepetir.Location = new System.Drawing.Point(572, 528);
+            btnRepetir.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnRepetir.Location = new System.Drawing.Point(572, 510);
             btnRepetir.Size = new System.Drawing.Size(128, 36);
             btnRepetir.Text = "🔁  Repetir";
             btnRepetir.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
@@ -280,10 +277,10 @@
             btnRepetir.TabIndex = 21;
             btnRepetir.Click += btnRepetir_Click;
 
-            // ── FILA 4: Playlist + WMP + Letra (Y=576) ───────────────────────
-
-            btnGuardarPlaylist.Location = new System.Drawing.Point(14, 576);
-            btnGuardarPlaylist.Size = new System.Drawing.Size(155, 42);
+            // ── Fila inferior: Playlist, WMP, Letra ───────────────────────────
+            btnGuardarPlaylist.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnGuardarPlaylist.Location = new System.Drawing.Point(14, 558);
+            btnGuardarPlaylist.Size = new System.Drawing.Size(148, 40);
             btnGuardarPlaylist.Text = "💾  Guardar Playlist";
             btnGuardarPlaylist.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnGuardarPlaylist.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -296,8 +293,9 @@
             btnGuardarPlaylist.TabIndex = 12;
             btnGuardarPlaylist.Click += btnGuardarPlaylist_Click;
 
-            btnCargarPlaylist.Location = new System.Drawing.Point(182, 576);
-            btnCargarPlaylist.Size = new System.Drawing.Size(155, 42);
+            btnCargarPlaylist.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnCargarPlaylist.Location = new System.Drawing.Point(174, 558);
+            btnCargarPlaylist.Size = new System.Drawing.Size(148, 40);
             btnCargarPlaylist.Text = "📂  Cargar Playlist";
             btnCargarPlaylist.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnCargarPlaylist.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -310,8 +308,9 @@
             btnCargarPlaylist.TabIndex = 13;
             btnCargarPlaylist.Click += btnCargarPlaylist_Click;
 
-            btnAbrirWMP.Location = new System.Drawing.Point(350, 576);
-            btnAbrirWMP.Size = new System.Drawing.Size(155, 42);
+            btnAbrirWMP.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnAbrirWMP.Location = new System.Drawing.Point(334, 558);
+            btnAbrirWMP.Size = new System.Drawing.Size(148, 40);
             btnAbrirWMP.Text = "🎵  Abrir en WMP";
             btnAbrirWMP.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnAbrirWMP.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -324,8 +323,9 @@
             btnAbrirWMP.TabIndex = 14;
             btnAbrirWMP.Click += btnAbrirWMP_Click;
 
-            btnLetra.Location = new System.Drawing.Point(518, 576);
-            btnLetra.Size = new System.Drawing.Size(155, 42);
+            btnLetra.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnLetra.Location = new System.Drawing.Point(494, 558);
+            btnLetra.Size = new System.Drawing.Size(148, 40);
             btnLetra.Text = "🎤  Buscar Letra";
             btnLetra.NormalColor = System.Drawing.Color.FromArgb(38, 38, 38);
             btnLetra.HoverColor = System.Drawing.Color.FromArgb(58, 58, 58);
@@ -338,10 +338,21 @@
             btnLetra.TabIndex = 15;
             btnLetra.Click += btnLetra_Click;
 
-            // ── Panel derecho — Eliminar / Editar Tags ────────────────────────
+            // ── Panel derecho: Cover + Letra ──────────────────────────────────
+            pbCover.Anchor = System.Windows.Forms.AnchorStyles.Top
+                                | System.Windows.Forms.AnchorStyles.Right;
+            pbCover.BackColor = System.Drawing.Color.FromArgb(28, 28, 28);
+            pbCover.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            pbCover.Location = new System.Drawing.Point(786, 14);
+            pbCover.Name = "pbCover";
+            pbCover.Size = new System.Drawing.Size(276, 258);
+            pbCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            pbCover.TabStop = false;
 
-            btnEliminarCancion.Location = new System.Drawing.Point(800, 14);
-            btnEliminarCancion.Size = new System.Drawing.Size(128, 46);
+            // ── Eliminar / Editar Tags — entre portada y letra, fijos (Top|Right)
+            btnEliminarCancion.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnEliminarCancion.Location = new System.Drawing.Point(786, 280);
+            btnEliminarCancion.Size = new System.Drawing.Size(132, 34);
             btnEliminarCancion.Text = "❌  Eliminar";
             btnEliminarCancion.NormalColor = System.Drawing.Color.FromArgb(110, 25, 25);
             btnEliminarCancion.HoverColor = System.Drawing.Color.FromArgb(160, 35, 35);
@@ -354,8 +365,9 @@
             btnEliminarCancion.TabIndex = 22;
             btnEliminarCancion.Click += btnEliminarCancion_Click;
 
-            btnEditarTags.Location = new System.Drawing.Point(942, 14);
-            btnEditarTags.Size = new System.Drawing.Size(128, 46);
+            btnEditarTags.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnEditarTags.Location = new System.Drawing.Point(926, 280);
+            btnEditarTags.Size = new System.Drawing.Size(136, 34);
             btnEditarTags.Text = "✏️  Editar Tags";
             btnEditarTags.NormalColor = System.Drawing.Color.FromArgb(22, 72, 130);
             btnEditarTags.HoverColor = System.Drawing.Color.FromArgb(32, 100, 175);
@@ -368,45 +380,28 @@
             btnEditarTags.TabIndex = 23;
             btnEditarTags.Click += btnEditarTags_Click;
 
-            // ── pbCover ───────────────────────────────────────────────────────
-            pbCover.Anchor = System.Windows.Forms.AnchorStyles.Top
-                                | System.Windows.Forms.AnchorStyles.Bottom
-                                | System.Windows.Forms.AnchorStyles.Left
-                                | System.Windows.Forms.AnchorStyles.Right;
-            pbCover.BackColor = System.Drawing.Color.FromArgb(28, 28, 28);
-            pbCover.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            pbCover.Location = new System.Drawing.Point(800, 75);
-            pbCover.Name = "pbCover";
-            pbCover.Size = new System.Drawing.Size(270, 330);
-            pbCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            pbCover.TabStop = false;
-
-            // ── lblCover ──────────────────────────────────────────────────────
-            lblCover.AutoSize = true;
-            lblCover.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            lblCover.ForeColor = System.Drawing.Color.White;
-            lblCover.BackColor = System.Drawing.Color.Transparent;
-            lblCover.Location = new System.Drawing.Point(800, 48);
-            lblCover.Name = "lblCover";
-            lblCover.Text = "Portada:";
-
-            // ── lblLyrics ─────────────────────────────────────────────────────
+            // lblLyrics — debajo de los botones
             lblLyrics.AutoSize = true;
+            lblLyrics.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             lblLyrics.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             lblLyrics.ForeColor = System.Drawing.Color.White;
             lblLyrics.BackColor = System.Drawing.Color.Transparent;
-            lblLyrics.Location = new System.Drawing.Point(800, 420);
+            lblLyrics.Location = new System.Drawing.Point(786, 322);
             lblLyrics.Name = "lblLyrics";
             lblLyrics.Text = "Letra:";
 
-            // ── rtbLyrics ─────────────────────────────────────────────────────
+            // rtbLyrics — crece hacia abajo con el form
+            rtbLyrics.Anchor = System.Windows.Forms.AnchorStyles.Top
+                                  | System.Windows.Forms.AnchorStyles.Bottom
+                                  | System.Windows.Forms.AnchorStyles.Right;
             rtbLyrics.BackColor = System.Drawing.Color.FromArgb(22, 22, 22);
             rtbLyrics.ForeColor = System.Drawing.Color.White;
             rtbLyrics.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            rtbLyrics.Font = new System.Drawing.Font("Segoe UI", 10F);
-            rtbLyrics.Location = new System.Drawing.Point(800, 448);
+            rtbLyrics.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            rtbLyrics.Font = new System.Drawing.Font("Segoe UI", 11F);
+            rtbLyrics.Location = new System.Drawing.Point(786, 346);
             rtbLyrics.Name = "rtbLyrics";
-            rtbLyrics.Size = new System.Drawing.Size(270, 170);
+            rtbLyrics.Size = new System.Drawing.Size(268, 252);
             rtbLyrics.Text = "";
 
             // ── timer1 ────────────────────────────────────────────────────────
@@ -415,10 +410,12 @@
             // ── Form1 ─────────────────────────────────────────────────────────
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            AutoSize = true;
             BackgroundImage = (System.Drawing.Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            ClientSize = new System.Drawing.Size(1090, 636);
+            ClientSize = new System.Drawing.Size(1080, 612);
+            MinimumSize = new System.Drawing.Size(900, 560);   // mínimo razonable
+            // NO AutoSize — necesitamos que redimensione libremente
+            AutoSize = false;
 
             Controls.Add(btnEditarTags);
             Controls.Add(btnEliminarCancion);
@@ -426,7 +423,6 @@
             Controls.Add(btnAleatorio);
             Controls.Add(rtbLyrics);
             Controls.Add(lblLyrics);
-            Controls.Add(lblCover);
             Controls.Add(pbCover);
             Controls.Add(btnLetra);
             Controls.Add(btnAbrirWMP);
@@ -437,7 +433,6 @@
             Controls.Add(lblTiempoTotal);
             Controls.Add(lblTiempoActual);
             Controls.Add(tbProgreso);
-            Controls.Add(lblCanciones);
             Controls.Add(btnNext);
             Controls.Add(btnPrev);
             Controls.Add(btnStop);

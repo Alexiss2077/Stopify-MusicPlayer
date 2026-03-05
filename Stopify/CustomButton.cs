@@ -88,11 +88,6 @@ namespace Stopify
                         g.DrawPath(pen, path);
                 }
 
-                // Sutil degradado superior (sensación de profundidad)
-                using (var grad = new LinearGradientBrush(
-                    new Point(0, 0), new Point(0, Height / 3),
-                    Color.FromArgb(30, Color.White), Color.Transparent))
-                    g.FillPath(grad, path);
             }
 
             // Texto + icono centrado
