@@ -12,13 +12,13 @@ namespace Stopify
     /// </summary>
     public class CustomScrollBar : Control
     {
-        // ── COLORES ────────────────────────────────────────────────────────────
+        // COLORES 
         public Color TrackColor { get; set; } = Color.FromArgb(28, 28, 28);
         public Color ThumbColor { get; set; } = Color.FromArgb(80, 80, 80);
         public Color ThumbHover { get; set; } = Color.FromArgb(120, 120, 120);
         public Color ThumbActive { get; set; } = Color.LimeGreen;
 
-        // ── ESTADO ─────────────────────────────────────────────────────────────
+        //'0 ESTADO 
         private int _minimum = 0;
         private int _maximum = 100;
         private int _value = 0;
@@ -46,7 +46,7 @@ namespace Stopify
 
         public event EventHandler Scroll;
 
-        // ── CONSTRUCTOR ───────────────────────────────────────────────────────
+        // ── CONSTRUCTOR 
         public CustomScrollBar()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint |
@@ -67,7 +67,7 @@ namespace Stopify
             e.Graphics.TranslateTransform(Left, Top);
         }
 
-        // ── DIBUJO ────────────────────────────────────────────────────────────
+        //DIBUJO 
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
@@ -96,7 +96,7 @@ namespace Stopify
             return (Math.Max(0, Math.Min(Height - th, ty)), th);
         }
 
-        // ── INTERACCIÓN ───────────────────────────────────────────────────────
+        //INTERACCIÓN 
         protected override void OnMouseEnter(EventArgs e)
         { _hover = true; Invalidate(); base.OnMouseEnter(e); }
 
@@ -114,7 +114,7 @@ namespace Stopify
             }
             else
             {
-                // Click en el track → saltar
+                // Click en el track - saltar
                 Value = e.Y < ty
                     ? Value - _largeChange
                     : Value + _largeChange;
@@ -145,7 +145,7 @@ namespace Stopify
         { Value += e.Delta < 0 ? _largeChange / 2 : -_largeChange / 2; base.OnMouseWheel(e); }
     }
 
-    // ── EXTENSIÓN: FillRoundedRectangle ──────────────────────────────────────
+    // EXTENSIÓN: FillRoundedRectangle 
     internal static class GraphicsExtensions
     {
         public static void FillRoundedRectangle(this Graphics g, Brush brush, Rectangle rect, int radius)

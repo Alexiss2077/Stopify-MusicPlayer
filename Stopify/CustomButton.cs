@@ -11,7 +11,7 @@ namespace Stopify
     /// </summary>
     public class CustomButton : Control
     {
-        // ── PROPIEDADES ───────────────────────────────────────────────────────
+        // PROPIEDADES 
         private bool _isHover = false;
         private bool _isPressed = false;
         private int _radius = 8;
@@ -38,7 +38,7 @@ namespace Stopify
         /// <summary>Grosor del borde (0 = sin borde).</summary>
         public int BorderWidth { get; set; } = 1;
 
-        // ── CONSTRUCTOR ───────────────────────────────────────────────────────
+        //CONSTRUCTOR 
         public CustomButton()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint |
@@ -54,7 +54,7 @@ namespace Stopify
             Height = 46;
         }
 
-        // ── FONDO (transparencia igual que CustomTrackBar) ────────────────────
+        // fondo (transparencia igual que CustomTrackBar) 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             if (Parent == null) { base.OnPaintBackground(e); return; }
@@ -65,7 +65,7 @@ namespace Stopify
             e.Graphics.TranslateTransform(Left, Top);
         }
 
-        // ── DIBUJO ────────────────────────────────────────────────────────────
+        //DIBUJO 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -98,7 +98,7 @@ namespace Stopify
                 TextFormatFlags.SingleLine);
         }
 
-        // ── MOUSE ─────────────────────────────────────────────────────────────
+        // MOUSE
         protected override void OnMouseEnter(EventArgs e)
         {
             _isHover = true; Invalidate();
@@ -120,7 +120,7 @@ namespace Stopify
             base.OnMouseUp(e);
         }
 
-        // ── TECLADO (Enter/Space dispara Click) ───────────────────────────────
+        //TECLADO(Enter/Space dispara Click) 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
@@ -128,7 +128,7 @@ namespace Stopify
             base.OnKeyDown(e);
         }
 
-        // ── HELPER ───────────────────────────────────────────────────────────
+        //HELPER 
         private GraphicsPath RoundedRect(Rectangle r, int radius)
         {
             int d = radius * 2;

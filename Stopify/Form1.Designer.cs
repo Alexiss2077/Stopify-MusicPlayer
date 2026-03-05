@@ -21,7 +21,7 @@
         private CustomButton btnEditarTags;
 
         private System.Windows.Forms.PictureBox pbCover;
-        // lblCover eliminado
+        
         private System.Windows.Forms.RichTextBox rtbLyrics;
         private System.Windows.Forms.Label lblCanciones;
         private System.Windows.Forms.Label lblLyrics;
@@ -79,7 +79,7 @@
             ((System.ComponentModel.ISupportInitialize)pbCover).BeginInit();
             SuspendLayout();
 
-            // ── dgvCanciones ──────────────────────────────────────────────────
+            // dgvCanciones
             // Anchor: se estira en todas las direcciones con el form
             dgvCanciones.AllowUserToAddRows = false;
             dgvCanciones.AllowUserToDeleteRows = false;
@@ -101,7 +101,7 @@
             dgvCanciones.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             dgvCanciones.CellDoubleClick += dgvCanciones_CellDoubleClick;
 
-            // ── FILA DE BOTONES PRINCIPALES (Y=14, altura 44) ─────────────────
+            // FILA DE BOTONES PRINCIPALES (Y=14, altura 44) 
             // Todos con Anchor = Top | Left para que no se muevan al redimensionar
 
             btnAbrirCarpeta.Location = new System.Drawing.Point(14, 14);
@@ -179,10 +179,9 @@
             btnNext.TabIndex = 5;
             btnNext.Click += btnNext_Click;
 
-            // ── lblCanciones (eliminado — más limpio sin él) ──────────────────
             // El grid arranca directo debajo de los botones
 
-            // ── tbProgreso — Anchor: Bottom | Left | Right ────────────────────
+            //  tbProgreso — Anchor: Bottom | Left | Right 
             tbProgreso.Anchor = System.Windows.Forms.AnchorStyles.Bottom
                                        | System.Windows.Forms.AnchorStyles.Left
                                        | System.Windows.Forms.AnchorStyles.Right;
@@ -200,7 +199,7 @@
             tbProgreso.MouseDown += tbProgreso_MouseDown;
             tbProgreso.MouseUp += tbProgreso_MouseUp;
 
-            // ── Tiempos ───────────────────────────────────────────────────────
+            //Tiempos 
             lblTiempoActual.AutoSize = true;
             lblTiempoActual.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblTiempoActual.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -221,7 +220,7 @@
             lblTiempoTotal.TabIndex = 9;
             lblTiempoTotal.Text = "00:00";
 
-            // ── Volumen ───────────────────────────────────────────────────────
+            // Volumen 
             lblVolumen.AutoSize = true;
             lblVolumen.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblVolumen.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -246,7 +245,7 @@
             tbVolumen.TabIndex = 11;
             tbVolumen.ValueChanged += tbVolumen_ValueChanged;
 
-            // ── Aleatorio / Repetir ───────────────────────────────────────────
+            /////Aleatorio / Repetir 
             btnAleatorio.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             btnAleatorio.Location = new System.Drawing.Point(432, 510);
             btnAleatorio.Size = new System.Drawing.Size(128, 36);
@@ -277,7 +276,7 @@
             btnRepetir.TabIndex = 21;
             btnRepetir.Click += btnRepetir_Click;
 
-            // ── Fila inferior: Playlist, WMP, Letra ───────────────────────────
+            // Fila inferior: Playlist, WMP, Letra 
             btnGuardarPlaylist.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             btnGuardarPlaylist.Location = new System.Drawing.Point(14, 558);
             btnGuardarPlaylist.Size = new System.Drawing.Size(148, 40);
@@ -338,7 +337,7 @@
             btnLetra.TabIndex = 15;
             btnLetra.Click += btnLetra_Click;
 
-            // ── Panel derecho: Cover + Letra ──────────────────────────────────
+            //Panel derecho: Cover + Letra 
             pbCover.Anchor = System.Windows.Forms.AnchorStyles.Top
                                 | System.Windows.Forms.AnchorStyles.Right;
             pbCover.BackColor = System.Drawing.Color.FromArgb(28, 28, 28);
@@ -404,10 +403,10 @@
             rtbLyrics.Size = new System.Drawing.Size(268, 252);
             rtbLyrics.Text = "";
 
-            // ── timer1 ────────────────────────────────────────────────────────
+            //timer1 
             timer1.Tick += timer1_Tick;
 
-            // ── Form1 ─────────────────────────────────────────────────────────
+            //Form1 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackgroundImage = (System.Drawing.Image)resources.GetObject("$this.BackgroundImage");

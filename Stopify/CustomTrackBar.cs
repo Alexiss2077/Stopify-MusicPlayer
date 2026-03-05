@@ -7,7 +7,7 @@ namespace Stopify
 {
     public class CustomTrackBar : Control
     {
-        // ── PROPIEDADES ───────────────────────────────────────────────────────
+        // PROPIEDADES 
         private int _minimum = 0;
         private int _maximum = 100;
         private int _value = 0;
@@ -45,7 +45,7 @@ namespace Stopify
 
         public event EventHandler ValueChanged;
 
-        // ── CONSTRUCTOR ───────────────────────────────────────────────────────
+        //hCONSTRUCTOR 
         public CustomTrackBar()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint |
@@ -72,7 +72,7 @@ namespace Stopify
             e.Graphics.TranslateTransform(Left, Top);
         }
 
-        // ── DIBUJO ────────────────────────────────────────────────────────────
+        //DIBUJO 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -114,7 +114,7 @@ namespace Stopify
                 g.FillEllipse(brush, tx, ty, thumbR * 2, thumbR * 2);
         }
 
-        // ── INTERACCIÓN ───────────────────────────────────────────────────────
+        // INTERACCIÓN 
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) { _isDragging = true; SetValueFromX(e.X); }

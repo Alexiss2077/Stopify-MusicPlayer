@@ -48,7 +48,7 @@ namespace Stopify
         private bool _fullscreen = false;
         private FormWindowState _prevState;
 
-        // ── Colores de estado ─────────────────────────────────────────────────
+        //  Colores de estado 
         private static readonly Color _playNormal = Color.FromArgb(30, 160, 30);
         private static readonly Color _playHover = Color.FromArgb(40, 200, 40);
         private static readonly Color _pauseNormal = Color.FromArgb(180, 130, 0);
@@ -85,7 +85,7 @@ namespace Stopify
             Resize += (s, e) => { ActualizarScrollBar(); ActualizarScrollBarLetra(); };
         }
 
-        // ── PANTALLA COMPLETA ─────────────────────────────────────────────────
+        //  PANTALLA COMPLETA 
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -109,7 +109,7 @@ namespace Stopify
             }
         }
 
-        // ── SCROLLBAR PERSONALIZADO ───────────────────────────────────────────
+        //  SCROLLBAR PERSONALIZADO 
 
         private void ConfigurarScrollBarPersonalizado()
         {
@@ -172,7 +172,7 @@ namespace Stopify
             _gridScroll.Value = dgvCanciones.FirstDisplayedScrollingRowIndex;
         }
 
-        // ── SCROLLBAR PERSONALIZADO LETRA ─────────────────────────────────────
+        //  SCROLLBAR PERSONALIZADO LETRA 
 
         private void ConfigurarScrollBarLetra()
         {
@@ -189,7 +189,7 @@ namespace Stopify
             Controls.Add(_lyricsScroll);
             _lyricsScroll.BringToFront();
 
-            // Scroll custom → mover el RichTextBox (con guard)
+            // Scroll custom  mover el RichTextBox (con guard)
             _lyricsScroll.Scroll += (s, e) =>
             {
                 if (_sincronizandoLetra) return;
@@ -250,7 +250,7 @@ namespace Stopify
             finally { _sincronizandoLetra = false; }
         }
 
-        // ── DRAG & DROP ────────────────────────────────────────────────────────
+        // DRAG & DROP 
 
         private void ConfigurarDragDrop()
         {
@@ -333,7 +333,7 @@ namespace Stopify
             }
         }
 
-        // ── GRID ───────────────────────────────────────────────────────────────
+        //GRID 
 
         private void ConfigurarGrid()
         {
@@ -397,7 +397,7 @@ namespace Stopify
             return s.Trim();
         }
 
-        // ── CARPETA / PLAYLIST ────────────────────────────────────────────────
+        //CARPETA / PLAYLIST
 
         private void btnAbrirCarpeta_Click(object sender, EventArgs e)
         {
@@ -444,7 +444,7 @@ namespace Stopify
             MessageBox.Show("Playlist cargada.");
         }
 
-        // ── REPRODUCCIÓN ──────────────────────────────────────────────────────
+        //REPRODUCCIÓN 
 
         private async void dgvCanciones_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -485,7 +485,7 @@ namespace Stopify
             SetPlayPauseState(false);
         }
 
-        // ── Estado visual de botones ──────────────────────────────────────────
+        //Estado visual de botones 
 
         private void SetPlayPauseState(bool playing)
         {
@@ -531,7 +531,7 @@ namespace Stopify
             btnRepetir.Invalidate();
         }
 
-        // ── CAMBIAR CANCIÓN ───────────────────────────────────────────────────
+        //CAMBIAR CANCIÓN 
 
         private async Task CambiarCancion(int direccion)
         {
@@ -567,7 +567,7 @@ namespace Stopify
             await ReproducirCancion(indiceActual);
         }
 
-        // ── BOTONES ───────────────────────────────────────────────────────────
+        //BOTONES 
 
         private async void btnPlayPause_Click(object sender, EventArgs e)
         {
@@ -654,7 +654,7 @@ namespace Stopify
             catch (Exception ex) { MessageBox.Show($"Error al editar tags: {ex.Message}"); }
         }
 
-        // ── COVER ─────────────────────────────────────────────────────────────
+        //cOVER
 
         private async Task CargarCover(string ruta, string artista, string titulo)
         {
@@ -710,7 +710,7 @@ namespace Stopify
             });
         }
 
-        // ── LETRA ─────────────────────────────────────────────────────────────
+        //LETRA
 
         private async void btnLetra_Click(object sender, EventArgs e)
         {
@@ -741,7 +741,7 @@ namespace Stopify
             finally { btnLetra.Enabled = true; }
         }
 
-        // ── WMP ───────────────────────────────────────────────────────────────
+        //WMP 
 
         private void btnAbrirWMP_Click(object sender, EventArgs e)
         {
@@ -756,7 +756,7 @@ namespace Stopify
             catch (Exception ex) { MessageBox.Show("Error abriendo WMP: " + ex.Message); }
         }
 
-        // ── TIMER ─────────────────────────────────────────────────────────────
+        //TIMER 
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -790,7 +790,7 @@ namespace Stopify
             arrastrandoProgreso = false;
         }
 
-        // ── HELPERS ───────────────────────────────────────────────────────────
+        //HELPERS 
 
         private bool ValidarCancionesCargadas()
         {
